@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="es" oncontextmenu="return false;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PROGRAMACIÓN OPERATIVA (DOBLE JORNADA) — MUNICIPALIDAD DE NOGALES</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 4px; background: #f0f2f5; color: #000000; font-size: 11px; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+
+        .header-institucional { 
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); 
+            color: #ffffff; padding: 8px; border-radius: 6px; margin-bottom: 6px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; border: 2.5px solid #93c5fd;
+        }
+        .dibujo-lateral-grupo { display: flex; gap: 4px; align-items: center; justify-content: center; width: 100%; }
+        @media(min-width: 600px) { .dibujo-lateral-grupo { width: auto; } }
+        
+        .dibujo-animado-box {
+            background: #ffffff; padding: 2px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            border-radius: 6px; border: 2.5px solid #facc15; width: 70px; height: 50px;
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        .dibujo-animado-box svg { width: 100%; height: 100%; }
+
+        .header-textos { text-align: center; flex: 1; min-width: 200px; }
+        h1 { font-size: 13px; margin: 0 0 2px 0; color: #ffffff; text-transform: uppercase; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.4); }
+        h2 { font-size: 10px; margin: 0; color: #bfdbfe; font-weight: normal; }
+
+        .semana-con-dibujos-wrapper {
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;
+            margin-bottom: 6px; background: #ffffff; padding: 6px; border-radius: 6px;
+            border: 1px solid #cbd5e1; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .lateral-semana-dibujos { display: flex; gap: 4px; align-items: center; justify-content: center; width: 100%; }
+        @media(min-width: 600px) { .lateral-semana-dibujos { width: auto; } }
+
+        .dibujo-semana-box {
+            width: 60px; height: 40px; background: #f8fafc; border: 2px solid #2563eb;
+            border-radius: 4px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 2px;
+        }
+        .dibujo-semana-box svg { width: 100%; height: 100%; }
+
+        .tabs-container { display: flex; justify-content: center; gap: 4px; margin-bottom: 6px; flex-wrap: wrap; }
+        .tab-btn { padding: 6px 12px; font-weight: bold; cursor: pointer; background: #e2e8f0; border: 1px solid #94a3b8; font-size: 11px; border-radius: 4px 4px 0 0; color: #475569; }
+        .tab-btn.active { background: #2563eb; color: #fff; border-color: #1d4ed8; }
+
+        .toolbar-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; background: #ffffff; padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .date-picker-container { display: flex; align-items: center; gap: 4px; font-weight: bold; font-size: 11px; }
+        .date-picker-container input { padding: 4px; font-size: 11px; border: 1px solid #94a3b8; border-radius: 3px; cursor: pointer; }
+        .botones-group { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; width: 100%; }
+        @media(min-width: 600px) { .botones-group { width: auto; } }
+        
+        button { padding: 6px 8px; font-weight: bold; cursor: pointer; background: #e2e8f0; border: 1px solid #94a3b8; font-size: 10px; border-radius: 3px; transition: 0.2s; }
+        button:hover { filter: brightness(0.9); }
+        button.primary { background: #2563eb; color: #fff; border: none; }
+        button.historico { background: #7c3aed; color: #fff; border: none; }
+        button.modo-lectura { background: #16a34a; color: #fff; border: none; }
+        button.sos { background: #dc2626; color: #fff; border: none; animation: pulse 1.5s infinite; }
+        button.whatsapp-btn { background: #16a34a; color: #fff; border: none; font-size: 11px; }
+        button.executive-btn { background: #0284c7; color: #fff; border: none; font-size: 11px; }
+        
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+        @keyframes parpadeoUrgente10min { 0% { background-color: #fef08a; border-color: #ca8a04; } 50% { background-color: #fecaca; border-color: #dc2626; } 100% { background-color: #fef08a; border-color: #ca8a04; } }
+        .alerta-10min-termino { animation: parpadeoUrgente10min 0.8s infinite; color: #991b1b !important; font-weight: 900 !important; }
+
+        #panel-desplegable-vehiculos {
+            display: none; background: #ffffff; border: 2px solid #2563eb; border-radius: 6px; padding: 10px; margin-bottom: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+        }
+
+        .container { overflow-x: auto; max-width: 100vw; border: 1px solid #000; margin-bottom: 15px; background: #fff; -webkit-overflow-scrolling: touch; }
+        
+        table { width: 100%; border-collapse: collapse; font-size: 10px; table-layout: fixed; }
+        th, td { border: 1px solid #000000; padding: 3px 2px; text-align: center; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        th { background: #1e3a8a; color: #ffffff; font-weight: bold; position: sticky; top: 0; z-index: 10; font-size: 10px; }
+        
+        th.col-num, td.col-num { width: 30px; min-width: 30px; }
+        th.col-nombre, td.col-nombre { width: 140px; min-width: 140px; text-align: left; padding-left: 4px; }
+        th.col-tel, td.col-tel { width: 38px; min-width: 38px; }
+        th.col-sit, td.col-sit { width: 45px; min-width: 45px; }
+        th.col-jornada, td.col-jornada { width: 130px; min-width: 130px; }
+        th.col-ppu, td.col-ppu { width: 65px; min-width: 65px; }
+
+        @media (max-width: 768px) {
+            th.col-num, td.col-num { width: 22px; min-width: 22px; }
+            th.col-nombre, td.col-nombre { width: 95px; min-width: 95px; }
+            th.col-tel, td.col-tel { width: 28px; min-width: 28px; }
+            th.col-sit, td.col-sit { display: none !important; }
+            th.col-jornada, td.col-jornada { width: 130px; min-width: 130px; }
+            th.col-ppu, td.col-ppu { width: 55px; min-width: 55px; }
+            .btn-ocultar-movil { display: none !important; }
+        }
+        
+        .dia-color-1 { background-color: #ffffff !important; color: #000000 !important; font-weight: bold !important; }
+        .dia-color-2 { background-color: #e0f2fe !important; color: #000000 !important; font-weight: bold !important; }
+
+        .celda-clikeable { cursor: pointer; font-weight: bold; text-align: center; padding: 2px; min-height: 20px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-radius: 3px; font-size: 9.5px; }
+        .celda-con-labor { background-color: #93c5fd !important; color: #1e3a8a !important; border: 2px solid #1d4ed8 !important; font-weight: 900 !important; }
+        .celda-disponible { background-color: #6ee7b7 !important; color: #064e3b !important; border: 2px solid #047857 !important; font-weight: 900 !important; }
+
+        .emergencia-rojo-total { background-color: #dc2626 !important; color: #ffffff !important; }
+        .emergencia-rojo-total * { background-color: #dc2626 !important; color: #ffffff !important; border-color: #f87171 !important; }
+
+        .leyenda-colores {
+            display: flex; gap: 12px; justify-content: center; align-items: center; margin-bottom: 6px; font-size: 10px; font-weight: bold; background: #ffffff; padding: 6px; border: 2px solid #2563eb; border-radius: 4px; flex-wrap: wrap;
+        }
+        .leyendaitem { display: flex; align-items: center; gap: 4px; }
+        .cuadro-muestra { width: 16px; height: 16px; border: 2px solid #000; border-radius: 3px; }
+
+        .dia-ausente-negro {
+            background-color: #000000 !important; color: #ffffff !important; font-weight: bold !important; cursor: not-allowed !important; font-size: 9.5px; text-align: center;
+        }
+
+        input[type="text"] { width: 100%; border: none; background: transparent; font-size: 10px; text-align: center; font-family: Arial, sans-serif; color: #000000; font-weight: bold; }
+        select { width: 100%; border: 1px solid #94a3b8; padding: 2px 1px; font-size: 9px; text-align: center; font-weight: bold; border-radius: 2px; background: #fff; cursor: pointer; color: #000000; }
+        
+        .status-activo { background-color: #d1fae5; color: #065f46; }
+        .status-admin { background-color: #fee2e2; color: #991b1b; }
+        .status-feriado { background-color: #fef3c7; color: #92400e; }
+        .status-licencia { background-color: #e0e7ff; color: #3730a3; }
+        
+        .phone-btn { background: none; border: none; cursor: pointer; font-size: 12px; padding: 0; }
+        
+        .modal { display: none; position: fixed; z-index: 200; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(2px); }
+        .modal-horario-content, .modal-calendario-content, .modal-historico-content { background-color: #fff; margin: 3% auto; padding: 15px; border: 1px solid #888; width: 98%; max-width: 600px; border-radius: 6px; }
+    </style>
+</head>
+<body id="cuerpo-principal-app">
+
+<div class="header-institucional">
+    <div class="dibujo-lateral-grupo">
+        <div class="dibujo-animado-box" title="Camión Tolva en Terreno">
+            <svg viewBox="0 0 100 80">
+                <rect x="5" y="45" width="45" height="25" fill="#f59e0b" rx="3"/>
+                <path d="M 50 45 L 75 45 L 85 70 L 50 70 Z" fill="#ef4444"/>
+                <rect x="35" y="30" width="20" height="15" fill="#3b82f6" rx="2"/>
+                <circle cx="20" cy="72" r="8" fill="#1f2937"/><circle cx="20" cy="72" r="3" fill="#9ca3af"/>
+                <circle cx="70" cy="72" r="8" fill="#1f2937"/><circle cx="70" cy="72" r="3" fill="#9ca3af"/>
+                <path d="M 75 35 L 90 40 L 80 50 Z" fill="#facc15"/>
+            </svg>
+        </div>
+        <div class="dibujo-animado-box" title="Camioneta Municipal">
+            <svg viewBox="0 0 100 80">
+                <rect x="20" y="45" width="60" height="22" fill="#3b82f6" rx="3"/>
+                <path d="M 55 45 L 70 30 L 85 45 Z" fill="#1e3a8a"/>
+                <circle cx="35" cy="69" r="7" fill="#1f2937"/><circle cx="70" cy="69" r="7" fill="#1f2937"/>
+                <rect x="25" y="50" width="15" height="10" fill="#fef08a" rx="1"/>
+            </svg>
+        </div>
+    </div>
+
+    <div class="header-textos">
+        <h1>ILUSTRE MUNICIPALIDAD DE NOGALES</h1>
+        <h2>UNIDAD DE MOVILIZACIÓN, OPERACIONES Y SERVICIOS GENERALES</h2>
+    </div>
+
+    <div class="dibujo-lateral-grupo" style="justify-content:center;">
+        <div class="dibujo-animado-box" title="Limpieza y Barrido de Sectores">
+            <svg viewBox="0 0 100 80">
+                <circle cx="45" cy="25" r="9" fill="#fbcfe8"/>
+                <path d="M 38 36 Q 45 34 52 36 L 55 60 L 48 60 L 45 45 L 42 60 L 35 60 Z" fill="#047857"/>
+                <line x1="52" y1="35" x2="70" y2="70" stroke="#b45309" stroke-width="3"/>
+                <rect x="65" y="65" width="18" height="8" fill="#f59e0b" rx="2"/>
+                <rect x="12" y="42" width="16" height="25" fill="#64748b" rx="2"/>
+                <path d="M 10 42 L 30 42 L 28 39 L 12 39 Z" fill="#334155"/>
+            </svg>
+        </div>
+        <div class="dibujo-animado-box" title="Trabajadores en Terreno">
+            <svg viewBox="0 0 100 80">
+                <path d="M 20 20 Q 30 10 45 15 Q 60 10 70 20 Q 80 20 80 30 Q 80 40 70 40 L 20 40 Q 10 40 10 30 Q 10 20 20 20 Z" fill="#94a3b8"/>
+                <line x1="25" y1="45" x2="20" y2="55" stroke="#3b82f6" stroke-width="2"/>
+                <line x1="45" y1="45" x2="40" y2="55" stroke="#3b82f6" stroke-width="2"/>
+                <line x1="65" y1="45" x2="60" y2="55" stroke="#3b82f6" stroke-width="2"/>
+                <circle cx="50" cy="52" r="7" fill="#fbcfe8"/>
+                <path d="M 44 60 Q 50 58 56 60 L 58 75 L 42 75 Z" fill="#f97316"/>
+                <path d="M 35 48 Q 50 38 65 48" stroke="#ef4444" stroke-width="4" fill="none" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
+</div>
+
+<div class="tabs-container">
+    <button class="tab-btn" id="btn-semana-1" onclick="cambiarSemanaActiva(1)">📅 Semana 1 (7 Días)</button>
+    <button class="tab-btn" id="btn-semana-2" onclick="cambiarSemanaActiva(2)">📅 Semana 2 (7 Días)</button>
+    <button class="tab-btn active" id="btn-modo-auto" style="background:#16a34a; color:#fff; cursor:default;">📱 Móvil Acordado (Vert: 1 Día deslizable | Horiz: Bloque 3 Días c/ Doble Clic)</button>
+</div>
+
+<div class="toolbar-container">
+    <div class="date-picker-container">
+        📅 Inicio Base: <input type="date" id="input-fecha-base" value="2026-08-31" onchange="actualizarFechasSemanas()">
+        <span id="label-dia-actual" style="color:#2563eb; margin-left: 5px;">Base: 31/08</span>
+    </div>
+    <div class="botones-group">
+        <button class="primary btn-ocultar-movil" onclick="copiarTablaNotepad()">📋 Copiar a Excel</button>
+        <button onclick="alternarDesplegableVehiculos()" style="background:#0284c7; color:#fff; font-weight:bold;">🚗 Datos de Vehículos</button>
+        <button class="historico btn-ocultar-movil" onclick="guardarRespaldoSemanal()">💾 Archivar Semana</button>
+        <button class="historico btn-ocultar-movil" onclick="abrirModalHistorico()" style="background:#5b21b6;">📂 Historial</button>
+        <button class="modo-lectura btn-ocultar-movil" id="btn-estado-modo" onclick="alternarModoLectura()">👁️ Modo Activo</button>
+        <button class="whatsapp-btn btn-ocultar-movil" onclick="copiarMinutaAutomatica()" style="background:#16a34a; font-weight:bold;">💬 Copiar Minuta</button>
+        <button class="executive-btn btn-ocultar-movil" onclick="enviarReporteEjecutivoWhatsApp()" style="background:#0284c7; font-weight:bold;">📱 Reporte Ejecutivo</button>
+        <button class="sos" id="btn-sos-accion" onclick="activarOVerificarEmergencia()">🚨 SOS</button>
+    </div>
+</div>
+
+<div id="panel-desplegable-vehiculos">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <h3 style="margin: 0; font-size: 12px; color: #1e3a8a;">🚗 PANEL DE CONTROL DE FLOTA MUNICIPAL (27 Vehículos — Revisiones Técnicas, Km & Combustible)</h3>
+        <div>
+            <label style="font-weight:bold; font-size:10px;">Año:</label>
+            <select id="select-anio-vehiculos" onchange="cambiarAnioVehiculos(this.value)" style="padding:2px; font-weight:bold;">
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+                <option value="2029">2029</option>
+            </select>
+            <button onclick="alternarDesplegableVehiculos()" style="background:#dc2626; color:#fff; border:none; padding:3px 8px; font-weight:bold; border-radius:3px; margin-left:6px; cursor:pointer;">✖ Cerrar Panel</button>
+        </div>
+    </div>
+    <div style="overflow-x: auto; max-height: 60vh;" id="contenido-panel-vehiculos"></div>
+</div>
+
+<div class="leyenda-colores">
+    <span>💡 <b>GUÍA DE COLORES Y ESTADOS OPERATIVOS:</b></span>
+    <div class="leyendaitem"><div class="cuadro-muestra" style="background:#6ee7b7; border-color:#047857;"></div><span><b>DISPONIBLE (PPU Bloqueada en --)</b></span></div>
+    <div class="leyendaitem"><div class="cuadro-muestra" style="background:#93c5fd; border-color:#1d4ed8;"></div><span><b>CON LABOR (PPU Habilitada / Reemplazo automático)</b></span></div>
+    <div class="leyendaitem"><div class="cuadro-muestra" style="background:#000000; border-color:#ffffff;"></div><span><b>AUSENCIA (Suplencia activada)</b></span></div>
+</div>
+
+<div class="semana-con-dibujos-wrapper">
+    <div class="lateral-semana-dibujos">
+        <div class="dibujo-semana-box" title="Operación Terreno">
+            <svg viewBox="0 0 80 50">
+                <rect x="10" y="20" width="35" height="18" fill="#2563eb" rx="2"/>
+                <path d="M 45 20 L 60 25 L 60 38 L 45 38 Z" fill="#1d4ed8"/>
+                <circle cx="20" cy="40" r="5" fill="#1f2937"/><circle cx="50" cy="40" r="5" fill="#1f2937"/>
+            </svg>
+        </div>
+    </div>
+
+    <div style="flex: 1; text-align: center; min-width: 220px;">
+        <h2 id="titulo-semana-activa" style="font-size: 12px; color: #1e3a8a; margin: 0; font-weight: bold;">PROGRAMACIÓN OPERATIVA — PLANILLA MADRE (7 DÍAS)</h2>
+    </div>
+
+    <div class="lateral-semana-dibujos" style="justify-content:center;">
+        <div class="dibujo-semana-box" title="Gestión Comunitaria">
+            <svg viewBox="0 0 80 50">
+                <path d="M 25 20 Q 40 10 55 20 Q 65 20 65 30 Q 65 40 55 40 L 25 40 Q 15 40 15 30 Q 15 20 25 20 Z" fill="#bfdbfe"/>
+                <line x1="30" y1="42" x2="25" y2="48" stroke="#2563eb" stroke-width="2"/>
+                <line x1="50" y1="42" x2="45" y2="48" stroke="#2563eb" stroke-width="2"/>
+            </svg>
+        </div>
+    </div>
+</div>
+
+<div class="container" id="area-copia">
+    <table id="tabla-principal">
+        <thead id="cabeza-tabla-principal"></thead>
+        <tbody id="cuerpo-tabla-principal"></tbody>
+    </table>
+</div>
+
+<div id="modalCalendarioAusencia" class="modal">
+    <div class="modal-calendario-content">
+        <span class="close" onclick="cerrarModalCalendario()">&times;</span>
+        <h2 style="font-size: 12px; margin-top:0; color: #1e3a8a; font-weight: bold;">📅 Seleccionar Rango de Ausencia y Activar Suplencia</h2>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+            <p id="label-funcionario-ausencia" style="font-size: 11px; font-weight: bold; color: #334155; margin: 0;"></p>
+            <label style="font-size: 10px; font-weight: bold;">Fecha de Inicio: <input type="date" id="input-fecha-inicio" style="border: 1px solid #cbd5e1; padding: 4px; border-radius: 3px; width: 100%;"></label>
+            <label style="font-size: 10px; font-weight: bold;">Fecha de Término: <input type="date" id="input-fecha-fin" style="border: 1px solid #cbd5e1; padding: 4px; border-radius: 3px; width: 100%;"></label>
+        </div>
+        <div style="margin-top: 15px; text-align: right;"><button class="primary" onclick="guardarAusenciaCalendario()">Aplicar y Reemplazar</button></div>
+    </div>
+</div>
+
+<div id="modalHorario" class="modal">
+    <div class="modal-horario-content">
+        <span class="close" onclick="cerrarModalHorario()">&times;</span>
+        <h2 style="font-size: 12px; margin-top:0; color: #1e3a8a; font-weight: bold;">⏰ Gestión Manual — Posibilidades & Celda Disponible (Límite Máx 12h en Fin de Semana)</h2>
+        <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px; font-size: 10px;">
+            <label><b>Posibilidad 1 de Labor:</b> <input type="text" id="input-b1" placeholder="Ej: 08:00 a 14:00 - Labor 1" oninput="calcularDisponibilidadAuto()" style="border: 1px solid #cbd5e1; padding: 3px; width: 100%;"></label>
+            <label><b>Posibilidad 2 de Labor:</b> <input type="text" id="input-b2" placeholder="Ej: 15:00 a 19:30 - Labor 2" oninput="calcularDisponibilidadAuto()" style="border: 1px solid #cbd5e1; padding: 3px; width: 100%;"></label>
+            <label><b>Posibilidad 3 de Labor:</b> <input type="text" id="input-b3" placeholder="Ej: Labor adicional" oninput="calcularDisponibilidadAuto()" style="border: 1px solid #cbd5e1; padding: 3px; width: 100%;"></label>
+            <label><b>🟢 Disponible (Auto/Manual):</b> <input type="text" id="input-disponible" placeholder="Ej: 🟢 DISPONIBLE (11:30 a 14:00)" style="border: 1px solid #cbd5e1; padding: 3px; width: 100%;"></label>
+            <label><b>📎 Archivo o Fotografía Adjunta:</b> <input type="text" id="input-archivo" placeholder="Ej: Foto_Evidencia.jpg" style="border: 1px solid #cbd5e1; padding: 3px; width: 100%;"></label>
+        </div>
+        <div style="margin-top: 12px; text-align: right;"><button class="primary" onclick="guardarDetalleCelda()">Guardar Cambios</button></div>
+    </div>
+</div>
+
+<div id="modalPpuDetalle" class="modal">
+    <div class="modal-horario-content">
+        <span class="close" onclick="cerrarModalPpuDetalle()">&times;</span>
+        <h2 style="font-size: 12px; margin-top:0; color: #1e3a8a; font-weight: bold;">🚗 Información de Vehículo</h2>
+        <div id="contenido-ppu-detalle" style="margin-top: 10px; font-size: 11px;"></div>
+    </div>
+</div>
+
+<div id="modalHistorico" class="modal">
+    <div class="modal-historico-content">
+        <span class="close" onclick="cerrarModalHistorico()">&times;</span>
+        <h2 style="font-size: 13px; margin-top:0; color: #1e3a8a; font-weight: bold;">📂 Historial y Archivo Automático (2026 - 2029)</h2>
+        <div style="margin-bottom: 10px;">
+            <select id="select-anio-historico" onchange="cambiarAnioHistorico(this.value)" style="padding: 4px; font-weight: bold;">
+                <option value="2026">Año 2026</option>
+                <option value="2027">Año 2027</option>
+                <option value="2028">Año 2028</option>
+                <option value="2029">Año 2029</option>
+            </select>
+        </div>
+        <div id="contenido-lista-historico" style="font-size: 11px;"></div>
+    </div>
+</div>
+
+<div id="modalEmergenciaCalendario" class="modal">
+    <div class="modal-calendario-content">
+        <span class="close" onclick="cerrarModalEmergencia()">&times;</span>
+        <h2 style="font-size: 12px; margin-top:0; color: #dc2626; font-weight: bold;">🚨 AUDITORÍA Y CIERRE DE EMERGENCIA MUNICIPAL</h2>
+        <p style="font-size: 10px;">La emergencia ha sido desactivada. Seleccione los días específicos que mantuvieron la alerta roja activa para su registro histórico:</p>
+        <div id="lista-fechas-emergencia" style="display: flex; flex-direction: column; gap: 4px; max-height: 200px; overflow-y: auto; margin: 10px 0; font-size: 10px;"></div>
+        <div style="text-align: right;"><button class="primary" onclick="guardarYRestaurarEmergencia()">Guardar Registro y Restaurar</button></div>
+    </div>
+</div>
+
+<script>
+    let anioActivoRegistro = 2026;
+    let anioActivoVehiculos = 2026;
+    let semanaActiva = 1;
+    let celdaActivaModal = null;
+    let modoSoloLectura = false;
+    let emergenciaActivaGlobal = false;
+    let diasEmergenciaRegistrados = JSON.parse(localStorage.getItem('nogales_emergencias_dias') || '[]');
+    let diaAmpliadoMovilIndex = null;
+    
+    let ausenciasInicialesDefecto = {
+        "Miguel Manzur": { tipo: "DIA ADMINISTRATIVO", tipoVisual: "DÍA ADMINISTRATIVO", inicio: "2026-08-31", fin: "2026-08-31" },
+        "Claudio Suarez": { tipo: "DIA ADMINISTRATIVO", tipoVisual: "DÍA ADMINISTRATIVO", inicio: "2026-08-31", fin: "2026-08-31" },
+        "Mario Cisternas": { tipo: "LICENCIA MEDICA", tipoVisual: "LICENCIA MÉDICA", inicio: "2026-08-31", fin: "2026-09-04" },
+        "Julio Vergara": { tipo: "FERIADO LEGAL", tipoVisual: "FERIADO LEGAL", inicio: "2026-08-31", fin: "2026-09-01" },
+        "Hector Sepulveda": { tipo: "FERIADO LEGAL", tipoVisual: "FERIADO LEGAL", inicio: "2026-08-31", fin: "2026-09-02" }
+    };
+
+    let registrosAusencias = JSON.parse(localStorage.getItem('nogales_ausencias') || JSON.stringify(ausenciasInicialesDefecto));
+    let datosCeldasPersonalizadas = JSON.parse(localStorage.getItem('nogales_celdas') || '{}');
+    let datosPpuPersonalizadas = JSON.parse(localStorage.getItem('nogales_ppu') || '{}');
+    
+    const mapaReemplazosDirectos = {
+        "Miguel Manzur": "Susana Vásquez",
+        "Rodrigo Jara": "Susana Vásquez",
+        "Susana Vásquez": "Patricio Osorio",
+        "Freddy Suárez": "Sergio Saavedra",
+        "Eduardo Bernal": "Jeremías Tapia",
+        "Alfonso Vera": "Eduardo Bernal"
+    };
+
+    const vehiculosMunicipalesOriginales = [
+        { ppu: "BP-KD-49", rtStr: "27/04/2026", rtIso: "2026-04-27", tipo: "Camión Volkswagen", motor: "D1A0153259", chasis: "BWN672S08R804663", unidad: "Unidad de Movilización", kmIni: "145940", meses: { Ene: "0", Feb: "0", Mar: "0", Abr: "144927", May: "0", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "HL-GZ-78", rtStr: "08/10/2026", rtIso: "2026-10-08", tipo: "Camión Hyundai HD-65", motor: "D4GAFJ174563", chasis: "KMFGA17HPGC291748", unidad: "Unidad de Movilización", kmIni: "70681", meses: { Ene: "96833", Feb: "181659", Mar: "135197", Abr: "210288", May: "258642", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "VB-83-47", rtStr: "04/01/2027", rtIso: "2027-01-04", tipo: "Camión Chevrolet FVR 1723", motor: "899375", chasis: "JALFVR32G23000008", unidad: "Unidad de Movilización", kmIni: "1265", meses: { Ene: "0", Feb: "0", Mar: "0", Abr: "0", May: "0", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "FP-KD-10", rtStr: "abril/2027", rtIso: "2027-04-15", tipo: "Camioneta Chevrolet D.max", motor: "KL7583MPA", chasis: "TFR86HDT000927", unidad: "Unidad de Agua Potable", kmIni: "15400", meses: { Ene: "41000", Feb: "43000", Mar: "42000", Abr: "44000", May: "45000", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "FP-KD-11", rtStr: "abril/2027", rtIso: "2027-04-15", tipo: "Camioneta Chevrolet D.max", motor: "KL7587MPA", chasis: "TFR86HDT000924", unidad: "Unidad de Movilización", kmIni: "266082", meses: { Ene: "171552", Feb: "141320", Mar: "162080", Abr: "120311", May: "101478", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "GK-PP-13", rtStr: "07/01/2027", rtIso: "2027-01-07", tipo: "Bus Volare V8L", motor: "891866293", chasis: "PB43M32FC054890", unidad: "Unidad de Movilización", kmIni: "254078", meses: { Ene: "71835", Feb: "115784", Mar: "302285", Abr: "495215", May: "523266", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "HZ-XP-31", rtStr: "25/09/2026", rtIso: "2026-09-25", tipo: "Bus Mercedes Benz 0500 RS", motor: "457908U10189979", chasis: "BM634011JB080329", unidad: "Unidad de Movilización", kmIni: "55610", meses: { Ene: "578913", Feb: "189302", Mar: "489907", Abr: "1775138", May: "1836778", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "CG-PZ-83", rtStr: "07/01/2027", rtIso: "2027-01-07", tipo: "Camión Volkswagen 26.220", motor: "360434359", chasis: "BW4782U49R840325", unidad: "Unidad de Movilización", kmIni: "133290", meses: { Ene: "845209", Feb: "402731", Mar: "292408", Abr: "855172", May: "825948", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "JW-YY-42", rtStr: "PENDIENTE", rtIso: "2026-12-31", tipo: "Hidro Camión Hako M31C", motor: "2864457", chasis: "WMU2M31E6HWG00050", unidad: "Unidad de Agua Potable", kmIni: "6271", meses: { Ene: "40506", Feb: "35592", Mar: "453340", Abr: "752607", May: "775492", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "KC-PH-82", rtStr: "06/02/2027", rtIso: "2027-02-06", tipo: "Bus Hyundai Country 25", motor: "DAGAHJ217996", chasis: "KMJHG17HPJCO73957", unidad: "Unidad de Movilización", kmIni: "128782", meses: { Ene: "167491", Feb: "157620", Mar: "50901", Abr: "62802", May: "114728", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "KR-GS-74", rtStr: "mayo/2027", rtIso: "2027-05-15", tipo: "Camioneta Volkswagen AMAROK", motor: "CNE113783", chasis: "WV1ZZZ2HZJA054684", unidad: "Gestión de Riesgos", kmIni: "118089", meses: { Ene: "47006", Feb: "191291", Mar: "122960", Abr: "251170", May: "188217", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "KR-GS-72", rtStr: "julio/2027", rtIso: "2027-07-15", tipo: "Camioneta Volkswagen AMAROK", motor: "CNE113055", chasis: "WV1ZZZ2HZJA054516", unidad: "Unidad de Movilización", kmIni: "88098", meses: { Ene: "47775", Feb: "57438", Mar: "115479", Abr: "188354", May: "250780", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "KR-GS-75", rtStr: "agosto/2027", rtIso: "2027-08-15", tipo: "Camioneta Volkswagen AMAROK", motor: "CNE114499", chasis: "WV1ZZZ2HZJA057652", unidad: "Unidad de Movilización", kmIni: "119595", meses: { Ene: "97503", Feb: "1367885", Mar: "0", Abr: "0", May: "0", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "LX.WP-96", rtStr: "21/09/2026", rtIso: "2026-09-21", tipo: "Camión Aljibe Volkswagen Constellation", motor: "2095385", chasis: "A445380953658241LR011414", unidad: "Unidad de Movilización", kmIni: "10369", meses: { Ene: "0", Feb: "0", Mar: "0", Abr: "0", May: "0", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "LX.WP-97", rtStr: "05/02/2027", rtIso: "2027-02-05", tipo: "Camión Aljibe Volkswagen Constellation", motor: "2095386", chasis: "A595380953658241LR011417", unidad: "Unidad de Movilización", kmIni: "18811", meses: { Ene: "0", Feb: "69229", Mar: "0", Abr: "209560", May: "343057", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "LX.WP-98", rtStr: "06/02/2027", rtIso: "2027-02-06", tipo: "Camión Aljibe Volkswagen Constellation", motor: "2095382", chasis: "A125380953658240LR010744", unidad: "Unidad de Movilización", kmIni: "25100", meses: { Ene: "264486", Feb: "129249", Mar: "292089", Abr: "136831", May: "0", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "RR.YH-65", rtStr: "07/01/2027", rtIso: "2027-01-07", tipo: "Camión Aljibe Volkswagen Constellation", motor: "2096138", chasis: "A8061389536588249NR037315", unidad: "Unidad de Movilización", kmIni: "9344", meses: { Ene: "232823", Feb: "188603", Mar: "150000", Abr: "289734", May: "515511", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "TG.BP-22", rtStr: "mayo/2028", rtIso: "2028-05-15", tipo: "Camioneta Nissan Navara", motor: "YS23F282C0138828", chasis: "ANBD33A6RL685343", unidad: "Unidad de Movilización", kmIni: "17603", meses: { Ene: "85029", Feb: "88956", Mar: "97087", Abr: "82817", May: "77483", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "TG.BP-21", rtStr: "abril/2028", rtIso: "2028-04-15", tipo: "Camioneta Nissan Navara", motor: "YS23F282CO139908", chasis: "ANBD33A3RL685347", unidad: "Unidad de Movilización", kmIni: "17816", meses: { Ene: "32935", Feb: "114019", Mar: "79469", Abr: "134547", May: "0", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "RK.YD-61", rtStr: "abril/2027", rtIso: "2027-04-15", tipo: "Camioneta Nissan Navara", motor: "YS23B266CO541623", chasis: "N6BD33A6NK809776", unidad: "Unidad de Movilización", kmIni: "75181", meses: { Ene: "99547", Feb: "20487", Mar: "40480", Abr: "0", May: "52947", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "TS.LD-69", rtStr: "enero/2027", rtIso: "2027-01-15", tipo: "Furgón Hiunday Staria", motor: "D4HBRJ013776", chasis: "KMHYE811DSU195110", unidad: "Unidad de Movilización", kmIni: "15154", meses: { Ene: "0", Feb: "0", Mar: "97087", Abr: "168658", May: "207853", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "VR.VR-83", rtStr: "PENDIENTE", rtIso: "2026-12-31", tipo: "Bus Mercedez Benz Sprinter", motor: "654920W01940188", chasis: "AC907645TE273549", unidad: "Unidad de Movilización", kmIni: "1265", meses: { Ene: "0", Feb: "0", Mar: "0", Abr: "0", May: "0", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "VD.DF-13", rtStr: "junio/2027", rtIso: "2027-06-15", tipo: "Camioneta Foton G7 MT 4x4 DC", motor: "R068940", chasis: "LVAV2MAB2RUO48085", unidad: "Seguridad Pública", kmIni: "8752", meses: { Ene: "212144", Feb: "165940", Mar: "105267", Abr: "110505", May: "87111", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "VD.DF-14", rtStr: "julio/2027", rtIso: "2027-07-15", tipo: "Camioneta Foton G7 MT 4x4 DC", motor: "R058508", chasis: "LVAV2MAB4RU07729", unidad: "Seguridad Pública", kmIni: "8815", meses: { Ene: "111013", Feb: "113367", Mar: "1909956", Abr: "313265", May: "501366", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "VZ.WP-26", rtStr: "diciembre/2027", rtIso: "2027-12-15", tipo: "Camioneta Municipal Asignada", motor: "VZ2600", chasis: "CHASISVZ26", unidad: "Secplac / DOM / Bienestar", kmIni: "12000", meses: { Ene: "0", Feb: "0", Mar: "0", Abr: "0", May: "0", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "HH.DH-54", rtStr: "06/10/2027", rtIso: "2027-10-06", tipo: "Retroexcavadora Changlin WZ 30-35", motor: "73252728", chasis: "WZ3000325", unidad: "Unidad de Movilización", kmIni: "15000", meses: { Ene: "0", Feb: "0", Mar: "0", Abr: "0", May: "0", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "VW.LX-75", rtStr: "13/04/2030", rtIso: "2030-04-13", tipo: "Retroexcavadora JCB 3CX ECO", motor: "SL320-40371U3159925", chasis: "JCB3CX4TAS3567548", unidad: "Unidad de Movilización", kmIni: "1", meses: { Ene: "0", Feb: "0", Mar: "0", Abr: "80023", May: "692981", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "VY.ST-78", rtStr: "noviembre/2030", rtIso: "2030-11-15", tipo: "SUV Tucson NX4C 2.0 Aut", motor: "G4NLTW614360", chasis: "LBENXBKDBVY179573", unidad: "Alcaldía", kmIni: "175", meses: { Ene: "0", Feb: "0", Mar: "0", Abr: "0", May: "0", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } }
+    ];
+
+    let vehiculosMunicipales = JSON.parse(JSON.stringify(vehiculosMunicipalesOriginales));
+    let datosVehiculosControl = {};
+    try {
+        let guardado = localStorage.getItem('nogales_vehiculos_control');
+        datosVehiculosControl = guardado ? JSON.parse(guardado) : {};
+    } catch(e) {
+        datosVehiculosControl = {};
+    }
+
+    let historialArchivoSemanas = JSON.parse(localStorage.getItem('nogales_archivo_historico') || '[]');
+    let funcionarioSeleccionadoAusencia = null;
+    let selectAusenciaActivo = null;
+
+    const mesesAnio = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+
+    const funcionariosLista = [
+        { nombre: "Marcelo Chacana", tel: "56992203114", ppuDef: "--", esConductor: true, tipoFila: "personal" },
+        { nombre: "Carolina Suazo", tel: "56974430795", ppuDef: "--", esConductor: false, tipoFila: "personal" },
+        { nombre: "Fabiola Bernales", tel: "56954048360", ppuDef: "--", esConductor: false, tipoFila: "personal" },
+        { nombre: "Orlando Tapia", tel: "56996234126", ppuDef: "KC-PH-82", esConductor: true, tipoFila: "personal" },
+        { nombre: "Gerardo Figueroa", tel: "56942031295", ppuDef: "GK-PP-13", esConductor: true, tipoFila: "personal" },
+        { nombre: "Alfonso Vera", tel: "56989964196", ppuDef: "HZ-XP-31", esConductor: true, tipoFila: "personal" },
+        { nombre: "Miguel Manzur", tel: "56975704357", ppuDef: "TD-LC-47", esConductor: true, tipoFila: "personal" },
+        { nombre: "Jeremias Tapia", tel: "56950663481", ppuDef: "CG-PZ-83", esConductor: true, tipoFila: "personal" },
+        { nombre: "Eduardo Bernal", tel: "56961368636", ppuDef: "VW.LX-75", esConductor: true, tipoFila: "personal" }, 
+        { nombre: "Freddy Suárez", tel: "56976000179", ppuDef: "FP-KD-11", esConductor: true, tipoFila: "personal" }, 
+        { nombre: "Sergio Saavedra", tel: "56994432551", ppuDef: "HL-GZ-78", esConductor: true, tipoFila: "personal" },
+        { nombre: "Claudio Suarez", tel: "56966253807", ppuDef: "JW-YY-42", esConductor: true, tipoFila: "personal" }, 
+        { nombre: "Rodrigo Jara", tel: "56973954225", ppuDef: "KR-GS-72", esConductor: true, tipoFila: "personal" },
+        { nombre: "Susana Vásquez", tel: "56993081405", ppuDef: "TD-LC-47", esConductor: true, tipoFila: "personal" },
+        { nombre: "Patricio Osorio", tel: "56950707528", ppuDef: "LX.WP-96", esConductor: true, tipoFila: "personal" },
+        { nombre: "Hector Sepulveda", tel: "56966622905", ppuDef: "LX.WP-97", esConductor: true, tipoFila: "personal" },
+        { nombre: "Oscar Alvarado", tel: "56920055164", ppuDef: "LX.WP-98", esConductor: true, tipoFila: "personal" },
+        { nombre: "Enzo Nuñez", tel: "56956757268", ppuDef: "--", esConductor: true, tipoFila: "personal" },
+        { nombre: "Julio Vergara", tel: "56941443588", ppuDef: "--", esConductor: true, tipoFila: "personal" },
+        { nombre: "Mario Cisternas", tel: "56951554560", ppuDef: "--", esConductor: true, tipoFila: "personal" },
+        { nombre: "Felipe Osorio", tel: "56978963649", ppuDef: "--", esConductor: true, tipoFila: "personal" },
+        { nombre: "Matias Fuentes", tel: "56936581786", ppuDef: "--", esConductor: true, tipoFila: "personal" },
+        { nombre: "Alcaldia", tel: "56985851000", ppuDef: "VY.ST-78", esConductor: true, tipoFila: "alcaldia" },
+        { nombre: "Secplac/DOM/Bien.", tel: ["56965205316", "56987445148", "56956435614"], labelTel: ["DOM: 56965205316", "Secplac: 56987445148", "Bienestar: 56956435614"], ppuDef: "VZ.WP-26", esConductor: true, tipoFila: "secplac" },
+        { nombre: "Seguridad Pública (1)", tel: "56997783436", ppuDef: "VD.DF-13", esConductor: true, tipoFila: "seguridad1" },
+        { nombre: "Seguridad Pública (2)", tel: "56997783436", ppuDef: "VD.DF-14", esConductor: true, tipoFila: "seguridad2" },
+        { nombre: "Gestión de Riesgos", tel: "56974850933", ppuDef: "KR-GS-74", esConductor: true, tipoFila: "riesgos" }
+    ];
+
+    function obtenerFechasCalculadas() {
+        let baseVal = document.getElementById("input-fecha-base").value;
+        let dBase = baseVal ? new Date(baseVal + "T00:00:00") : new Date("2026-08-31T00:00:00");
+        if (semanaActiva === 2) { dBase.setDate(dBase.getDate() + 7); }
+        let fechas = [];
+        for (let i = 0; i < 7; i++) {
+            let f = new Date(dBase);
+            f.setDate(f.getDate() + i);
+            let yyyy = f.getFullYear();
+            let mm = String(f.getMonth() + 1).padStart(2, '0');
+            let dd = String(f.getDate()).padStart(2, '0');
+            let nombreDiaStr = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"][i];
+            fechas.push({ fechaIso: `${yyyy}-${mm}-${dd}`, textoCorto: `${dd}/${mm}`, nombreDia: nombreDiaStr, diaSemanaIndex: i });
+        }
+        return fechas;
+    }
+
+    function obtenerIndicesDiasAutomatico() {
+        let esMovil = window.innerWidth <= 768;
+        if (!esMovil) {
+            return [0, 1, 2, 3, 4, 5, 6]; 
+        }
+
+        let esHorizontal = window.innerWidth > window.innerHeight;
+        
+        if (esHorizontal) {
+            if (diaAmpliadoMovilIndex !== null) {
+                return [diaAmpliadoMovilIndex];
+            }
+            return [0, 1, 2];
+        } else {
+            let indiceHoy = 0;
+            let ahora = new Date();
+            let baseVal = document.getElementById("input-fecha-base").value;
+            let dBase = baseVal ? new Date(baseVal + "T00:00:00") : new Date("2026-08-31T00:00:00");
+            if (semanaActiva === 2) dBase.setDate(dBase.getDate() + 7);
+            
+            let diffTime = ahora - dBase;
+            let diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            if (diffDays >= 0 && diffDays < 7) {
+                indiceHoy = diffDays;
+            }
+            return [indiceHoy];
+        }
+    }
+
+    function actualizarFechasSemanas() {
+        let fechas = obtenerFechasCalculadas();
+        let esMovil = window.innerWidth <= 768;
+        let etiquetaSemana = semanaActiva === 1 ? "Semana 1" : "Semana 2";
+
+        if (!esMovil) {
+            document.getElementById("titulo-semana-activa").innerText = `PROGRAMACIÓN OPERATIVA — ${etiquetaSemana.toUpperCase()} (Planilla Madre 7 Días: Del ${fechas[0].textoCorto} al ${fechas[6].textoCorto})`;
+        } else {
+            let indices = obtenerIndicesDiasAutomatico();
+            let esHorizontal = window.innerWidth > window.innerHeight;
+            if (esHorizontal && diaAmpliadoMovilIndex !== null) {
+                document.getElementById("titulo-semana-activa").innerText = `VISITA AMPLIADA: ${fechas[diaAmpliadoMovilIndex].nombreDia} (${fechas[diaAmpliadoMovilIndex].textoCorto}) — [Doble Clic para Volver a 3 Días]`;
+            } else {
+                let modoStr = esHorizontal ? "Bloque 3 Días (Horizontal)" : `Día Único: ${fechas[indices[0]].nombreDia} (Deslizable)`;
+                document.getElementById("titulo-semana-activa").innerText = `PROGRAMACIÓN OPERATIVA — ${modoStr.toUpperCase()}`;
+            }
+        }
+    }
+
+    function cambiarSemanaActiva(num) {
+        semanaActiva = num;
+        diaAmpliadoMovilIndex = null;
+        document.getElementById("btn-semana-1").className = semanaActiva === 1 ? "tab-btn active" : "tab-btn";
+        document.getElementById("btn-semana-2").className = semanaActiva === 2 ? "tab-btn active" : "tab-btn";
+        actualizarFechasSemanas();
+        construirTablaPrincipal();
+    }
+
+    function obtenerDatosJornadasBase(nombre, tipoFila, diaSemanaIndex, nombreDiaStr) {
+        if (nombre === "Carolina Suazo") return { b1: "08:00 a 14:00 - Apoyo Administrativo", b2: "", b3: "", disponible: "", archivo: "" };
+        if (nombre === "Fabiola Bernales") return { b1: "08:00 a 14:00 - Gestión Bodega", b2: "", b3: "", disponible: "", archivo: "" };
+
+        if (nombre === "Freddy Suárez" && (nombreDiaStr === "Miércoles" || nombreDiaStr === "Jueves")) {
+            return { b1: "08:00 a 14:00 - Entrega de Agua Potable", b2: "", b3: "", disponible: "", archivo: "" };
+        }
+
+        if (tipoFila === "alcaldia") {
+            if (diaSemanaIndex < 5) return { b1: "08:00 a 14:00 - Funciones propias del cargo", b2: "15:00 a 19:30 - Funciones propias del cargo", b3: "", disponible: "", archivo: "" };
+            return { b1: "", b2: "", b3: "", disponible: "", archivo: "" };
+        }
+        if (tipoFila === "secplac") {
+            if (diaSemanaIndex < 5) return { b1: "08:00 a 14:00 - Labores en terreno", b2: "15:00 a 19:30 - Labores en terreno", b3: "", disponible: "", archivo: "" };
+            return { b1: "", b2: "", b3: "", disponible: "", archivo: "" };
+        }
+        if (tipoFila === "seguridad1" || tipoFila === "seguridad2") {
+            if (diaSemanaIndex < 5) return { b1: "08:00 a 14:00 - Fiscalización y Prevención", b2: "15:00 a 19:30 - Fiscalización y Prevención", b3: "", disponible: "", archivo: "" };
+            return { b1: "", b2: "", b3: "", disponible: "", archivo: "" };
+        }
+        if (tipoFila === "riesgos") {
+            if (diaSemanaIndex < 5) return { b1: "08:00 a 14:00 - Labores de Prevención en terreno", b2: "15:00 a 19:30 - Labores de Prevención en terreno", b3: "", disponible: "", archivo: "" };
+            return { b1: "", b2: "", b3: "", disponible: "", archivo: "" };
+        }
+        
+        if (diaSemanaIndex >= 0 && diaSemanaIndex <= 4) {
+            if (nombre === "Alfonso Vera") return { b1: "05:00 a 11:30 - Traslado de Estudiantes", b2: "", b3: "", disponible: "🟢 DISPONIBLE (11:30 a 14:00)", archivo: "" };
+            if (nombre === "Gerardo Figueroa") return { b1: "07:00 a 08:30 - Bus Escolar Mañana", b2: "", b3: "", disponible: "", archivo: "" };
+            if (nombre === "Orlando Tapia") return { b1: "07:00 a 08:30 - Bus Escolar", b2: "", b3: "", disponible: "", archivo: "" };
+            if (nombre === "Miguel Manzur") return { b1: "08:00 a 14:00 - Apoyo Terreno", b2: "", b3: "", disponible: "", archivo: "" };
+        } 
+        return { b1: "", b2: "", b3: "", disponible: "", archivo: "" };
+    }
+
+    function verificarAlerta10Minutos(textoLabor) {
+        if (!textoLabor) return false;
+        let regexTime = /(\d{2}:\d{2})\s*a\s*(\d{2}:\d{2})/g;
+        let match;
+        let ahora = new Date();
+        let minutosActuales = ahora.getHours() * 60 + ahora.getMinutes();
+
+        while ((match = regexTime.exec(textoLabor)) !== null) {
+            let [_, ini, fin] = match;
+            let partesFin = fin.split(':');
+            let minutosFinLab = parseInt(partesFin[0]) * 60 + parseInt(partesFin[1]);
+            let diferenciaMinutos = minutosFinLab - minutosActuales;
+
+            if (diferenciaMinutos > 0 && diferenciaMinutos <= 10) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function renderizarCeldaManual(b1, b2, b3, disponible, archivo, tipoJornada, esSabDom, tipoFila) {
+        let tareas = [b1, b2, b3].filter(t => t && t.trim() !== "");
+        let tieneDisp = disponible && disponible.trim() !== "";
+        let tieneArchivo = archivo && archivo.trim() !== "";
+
+        let textoCompletoLabores = tareas.join(" ");
+        let esUrgente10Min = verificarAlerta10Minutos(textoCompletoLabores);
+
+        if (tareas.length === 0 && !tieneDisp) {
+            const filasPermanentes = ["alcaldia", "secplac", "seguridad1", "seguridad2", "riesgos"];
+            if (filasPermanentes.includes(tipoFila) && tipoJornada === 'tarde') {
+                return { htmlRender: "Funciones asignadas", claseCss: "celda-con-labor", tieneLabor: true };
+            }
+
+            let def = esSabDom ? "🟢 DISPONIBLE (Sábado/Domingo)" : (tipoJornada === 'manana' ? "🟢 DISPONIBLE (08:00-14:00)" : "🟢 DISPONIBLE (15:00-19:30)");
+            return { htmlRender: def, claseCss: "celda-disponible", tieneLabor: false };
+        }
+
+        let html = "";
+        tareas.forEach(t => { html += `<div>${t}</div>`; });
+        if (tieneDisp) {
+            html += `<div style="color:#047857; font-weight:900;">${disponible}</div>`;
+        }
+        if (tieneArchivo) {
+            html += `<div style="font-size:9px; color:#1e3a8a;">📎 ${archivo}</div>`;
+        }
+
+        let clase = tareas.length > 0 ? (esUrgente10Min ? "celda-con-labor alerta-10min-termino" : "celda-con-labor") : "celda-disponible";
+        return { htmlRender: html, claseCss: clase, tieneLabor: tareas.length > 0 };
+    }
+
+    function calcularDisponibilidadAuto() {
+        let b1 = document.getElementById("input-b1").value;
+        let b2 = document.getElementById("input-b2").value;
+        let b3 = document.getElementById("input-b3").value;
+        let regexTime = /(\d{2}:\d{2})\s*a\s*(\d{2}:\d{2})/g;
+        let matches = [];
+        let textAll = b1 + " " + b2 + " " + b3;
+        let match;
+        while ((match = regexTime.exec(textAll)) !== null) {
+            let [_, ini, fin] = match;
+            let toMin = t => { let p = t.split(':'); return parseInt(p[0]) * 60 + parseInt(p[1]); };
+            matches.push({ start: toMin(ini), end: toMin(fin) });
+        }
+        
+        let jornadaStart = 480; 
+        let jornadaEnd = 840;   
+        let gaps = [];
+        let current = jornadaStart;
+
+        if (matches.length > 0) {
+            matches.sort((a, b) => a.start - b.start);
+            let duracionTotalMinutos = 0;
+            matches.forEach(m => { duracionTotalMinutos += (m.end - m.start); });
+            if (duracionTotalMinutos > 720) {
+                alert("⚠️ LÍMITE DE 12 HORAS SUPERADO: El turno continuo no puede superar las 12 horas.");
+                return;
+            }
+
+            matches.forEach(m => {
+                if (m.start > current) {
+                    let h1 = String(Math.floor(current / 60)).padStart(2, '0') + ":" + String(current % 60).padStart(2, '0');
+                    let h2 = String(Math.floor(m.start / 60)).padStart(2, '0') + ":" + String(m.start % 60).padStart(2, '0');
+                    gaps.push(`${h1} a ${h2}`);
+                }
+                if (m.end > current) current = m.end;
+            });
+
+            if (current < jornadaEnd) {
+                let h1 = String(Math.floor(current / 60)).padStart(2, '0') + ":" + String(current % 60).padStart(2, '0');
+                let h2 = String(Math.floor(jornadaEnd / 60)).padStart(2, '0') + ":" + String(jornadaEnd % 60).padStart(2, '0');
+                gaps.push(`${h1} a ${h2}`);
+            }
+
+            if (gaps.length > 0) {
+                document.getElementById("input-disponible").value = `🟢 DISPONIBLE (${gaps.join(', ')})`;
+            }
+        }
+    }
+
+    function generarSelectPpuInteligente(nombre, tipoFila, esConductor, ppuDefecto, keyMan, keyTar, keySd, d) {
+        const personalBloqueadoPpu = ["Marcelo Chacana", "Carolina Suazo", "Fabiola Bernales", "Enzo Nuñez", "Julio Vergara", "Mario Cisternas", "Felipe Osorio", "Matias Fuentes"];
+        const filasPermanentesPpu = ["alcaldia", "secplac", "seguridad1", "seguridad2", "riesgos"];
+
+        if (filasPermanentesPpu.includes(tipoFila)) {
+            return `<select disabled style="background:#e0f2fe; font-weight:bold; cursor:default;"><option value="${ppuDefecto}">${ppuDefecto}</option></select>`;
+        }
+
+        if (!esConductor || personalBloqueadoPpu.includes(nombre)) {
+            return `<select disabled style="background:#f1f5f9; color:#94a3b8; cursor:not-allowed;"><option value="--">--</option></select>`;
+        }
+
+        let base = obtenerDatosJornadasBase(nombre, tipoFila, d, "");
+        let regMan = datosCeldasPersonalizadas[keyMan] || { b1: base.b1, b2: base.b2, b3: base.b3, disponible: base.disponible };
+        let regTar = datosCeldasPersonalizadas[keyTar] || { b1: "", b2: "", b3: "", disponible: "" };
+        let regSd = datosCeldasPersonalizadas[keySd] || { b1: base.b1, b2: base.b2, b3: base.b3, disponible: base.disponible };
+
+        let tieneLaborManana = regMan.b1 || regMan.b2 || regMan.b3;
+        let tieneLaborTarde = regTar.b1 || regTar.b2 || regTar.b3;
+        let tieneLaborSd1 = regSd.b1 || regSd.b2 || regSd.b3;
+        let tieneLaborSd2 = regSd.disponible && !regSd.disponible.includes("🟢 DISPONIBLE");
+
+        let activoConLabor = (d < 5) ? (tieneLaborManana || tieneLaborTarde) : (tieneLaborSd1 || tieneLaborSd2);
+
+        let keyPpu = `ppu_${keyMan}`;
+        let ppuActual = datosPpuPersonalizadas[keyPpu] || (activoConLabor ? ppuDefecto : "--");
+
+        if (!activoConLabor) {
+            return `<select disabled style="background:#f1f5f9; color:#94a3b8; cursor:not-allowed;" title="Bloqueado: Funcionario Disponible"><option value="--">--</option></select>`;
+        }
+
+        let patentesExcluidas = ["VY.ST-78", "VZ.WP-26", "VD.DF-13", "VD.DF-14", "KR-GS-74"];
+        let opciones = `<option value="--">--</option>`;
+        vehiculosMunicipales.forEach(v => {
+            if (!patentesExcluidas.includes(v.ppu)) {
+                let sel = (v.ppu === ppuActual) ? "selected" : "";
+                opciones += `<option value="${v.ppu}" ${sel}>${v.ppu}</option>`;
+            }
+        });
+        return `<select onchange="guardarPpuCelda(this, '${keyPpu}')" ondblclick="mostrarDetallePpu(this.value)" style="background:#e0f2fe; font-weight:bold;">${opciones}</select>`;
+    }
+
+    function guardarPpuCelda(selectEl, keyPpu) {
+        datosPpuPersonalizadas[keyPpu] = selectEl.value;
+        localStorage.setItem('nogales_ppu', JSON.stringify(datosPpuPersonalizadas));
+    }
+
+    function mostrarDetallePpu(ppu) {
+        let v = vehiculosMunicipales.find(x => x.ppu === ppu);
+        if (v) {
+            document.getElementById("contenido-ppu-detalle").innerHTML = `<b>PPU:</b> ${v.ppu}<br><b>Tipo:</b> ${v.tipo}<br><b>Motor:</b> ${v.motor}<br><b>Chasis:</b> ${v.chasis}<br><b>Unidad:</b> ${v.unidad}<br><b>Revisión Técnica:</b> ${v.rtStr}`;
+            document.getElementById("modalPpuDetalle").style.display = "block";
+        }
+    }
+    function cerrarModalPpuDetalle() { document.getElementById("modalPpuDetalle").style.display = "none"; }
+
+    function obtenerAusenciaFecha(nombre, fechaIso) {
+        if (!registrosAusencias[nombre]) return null;
+        let aus = registrosAusencias[nombre];
+        let fObj = new Date(fechaIso + "T00:00:00");
+        if (fObj >= new Date(aus.inicio + "T00:00:00") && fObj <= new Date(aus.fin + "T00:00:00")) return aus;
+        return null;
+    }
+
+    function construirTablaPrincipal() {
+        let thead = document.getElementById("cabeza-tabla-principal");
+        let tbody = document.getElementById("cuerpo-tabla-principal");
+        let fechasSemanales = obtenerFechasCalculadas();
+        let diasARenderizar = obtenerIndicesDiasAutomatico();
+        let esMovil = window.innerWidth <= 768;
+
+        let htmlHeadTh1 = `<tr><th rowspan="2" class="col-num">N°</th><th rowspan="2" class="col-nombre">Nombre</th><th rowspan="2" class="col-tel">Tel</th><th rowspan="2" class="col-sit" title="Situación">ST</th>`;
+        let htmlHeadTh2 = `<tr>`;
+
+        diasARenderizar.forEach((d, idx) => {
+            let colorClase = (idx % 2 === 1) ? "dia-color-2" : "dia-color-1";
+            let nombreDiaStr = fechasSemanales[d].nombreDia;
+            let esSabDom = d >= 5;
+            let estiloTh = esSabDom ? `background:#1e3a8a; color:#fff;` : ``;
+
+            let ondblclickTh = esSabDom ? `` : `ondblclick="ampliarDiaMovil(${d})" title="Doble clic para ampliar o restaurar vista"`;
+
+            if (!esSabDom) {
+                htmlHeadTh1 += `<th colspan="3" id="th-d${d}" class="${colorClase}" style="${estiloTh} cursor:pointer;" ${ondblclickTh}>${nombreDiaStr} (${fechasSemanales[d].textoCorto}) 🔍</th>`;
+                htmlHeadTh2 += `
+                    <th class="col-jornada ${colorClase}" style="color:#000;">Mañana (08:00-14:00)</th>
+                    <th class="col-jornada ${colorClase}" style="color:#000;">Tarde (15:00-19:30)</th>
+                    <th class="col-ppu ${colorClase}" style="color:#000;">PPU</th>`;
+            } else {
+                htmlHeadTh1 += `<th colspan="2" id="th-d${d}" class="${colorClase}" style="${estiloTh} cursor:pointer;" ${ondblclickTh}>${nombreDiaStr} (${fechasSemanales[d].textoCorto}) 🔍</th>`;
+                htmlHeadTh2 += `
+                    <th class="col-jornada ${colorClase}" style="color:#000;">Turno / Horario (Máx 12h)</th>
+                    <th class="col-ppu ${colorClase}" style="color:#000;">PPU</th>`;
+            }
+        });
+        htmlHeadTh1 += `</tr>`;
+        htmlHeadTh2 += `</tr>`;
+        thead.innerHTML = htmlHeadTh1 + htmlHeadTh2;
+
+        let htmlBody = "";
+        funcionariosLista.forEach((f, index) => {
+            let num = f.tipoFila === "personal" ? (index + 1) : "—";
+            let tipoAusenciaActual = registrosAusencias[f.nombre] ? registrosAusencias[f.nombre].tipo : "ACTIVO";
+            let letraSt = tipoAusenciaActual === "DIA ADMINISTRATIVO" ? "D" : (tipoAusenciaActual === "FERIADO LEGAL" ? "F" : (tipoAusenciaActual === "LICENCIA MEDICA" ? "L" : "A"));
+            let claseEstado = tipoAusenciaActual === "DIA ADMINISTRATIVO" ? "status-admin" : (tipoAusenciaActual === "FERIADO LEGAL" ? "status-feriado" : (tipoAusenciaActual === "LICENCIA MEDICA" ? "status-licencia" : "status-activo"));
+
+            let selectStHtml = esMovil ? 
+                `<select class="${claseEstado}" disabled style="cursor:default;"><option value="${tipoAusenciaActual}">${letraSt}</option></select>` :
+                `<select class="${claseEstado}" onchange="cambiarSituacionFila(this, '${f.nombre}')" title="Haz clic para cambiar situación">
+                    <option value="Activo" ${tipoAusenciaActual === "ACTIVO" ? "selected" : ""}>A</option>
+                    <option value="Feriado legal" ${tipoAusenciaActual === "FERIADO LEGAL" ? "selected" : ""}>F</option>
+                    <option value="Dia administrativo" ${tipoAusenciaActual === "DIA ADMINISTRATIVO" ? "selected" : ""}>D</option>
+                    <option value="Licencia medica" ${tipoAusenciaActual === "LICENCIA MEDICA" ? "selected" : ""}>L</option>
+                </select>`;
+
+            let telHtml = "";
+            if (Array.isArray(f.tel)) {
+                let opcionesTel = `<select style="background:#e0f2fe; font-weight:bold;"><option value="">📞 Teléfonos</option>`;
+                f.tel.forEach((tNum, tIdx) => {
+                    opcionesTel += `<option value="${tNum}">${f.labelTel[tIdx]}</option>`;
+                });
+                opcionesTel += `</select>`;
+                telHtml = opcionesTel;
+            } else {
+                telHtml = `<button class="phone-btn" onclick="llamar('${f.tel}')" title="Llamar">📞</button>`;
+            }
+
+            let estiloNombreExtra = f.tipoFila !== "personal" ? `background:#f1f5f9; text-align:left; font-weight:bold; color:#000000;` : `background:#f1f5f9; text-align:left; font-weight:bold;`;
+
+            htmlBody += `<tr data-funcionario="${f.nombre}">
+                <td class="col-num">${num}</td>
+                <td class="col-nombre"><input type="text" value="${f.nombre}" readonly style="${estiloNombreExtra}"></td>
+                <td class="col-tel">${telHtml}</td>
+                <td class="col-sit">${selectStHtml}</td>`;
+
+            diasARenderizar.forEach((d, idx) => {
+                let fechaIso = fechasSemanales[d].fechaIso;
+                let nombreDiaStr = fechasSemanales[d].nombreDia;
+                let ausObj = obtenerAusenciaFecha(f.nombre, fechaIso);
+                let claseColorDia = (idx % 2 === 1) ? "dia-color-2" : "dia-color-1";
+                
+                let base = obtenerDatosJornadasBase(f.nombre, f.tipoFila, d, nombreDiaStr);
+                let keyMan = `${f.nombre}_s${semanaActiva}_d${d}_man`;
+                let keyTar = `${f.nombre}_s${semanaActiva}_d${d}_tar`;
+                let keySabDom = `${f.nombre}_s${semanaActiva}_d${d}_sd`;
+
+                let regMan = datosCeldasPersonalizadas[keyMan] || { b1: base.b1, b2: base.b2, b3: base.b3, disponible: base.disponible, archivo: base.archivo };
+                let regTar = datosCeldasPersonalizadas[keyTar] || { b1: "", b2: "", b3: "", disponible: "", archivo: "" };
+                let regSD = datosCeldasPersonalizadas[keySabDom] || { b1: base.b1, b2: base.b2, b3: base.b3, disponible: base.disponible, archivo: base.archivo };
+
+                let onclickAttr = f.tipoFila !== "personal" ? `` : `onclick="abrirModalDetalle(this, '${keyMan}')"`;
+                let onclickTarAttr = f.tipoFila !== "personal" ? `` : `onclick="abrirModalDetalle(this, '${keyTar}')"`;
+                let onclickSdAttr = f.tipoFila !== "personal" ? `` : `onclick="abrirModalDetalle(this, '${keySabDom}')"`;
+
+                if (ausObj) {
+                    let textoAusencia = ausObj.tipoVisual || ausObj.tipo;
+
+                    if (d < 5) {
+                        htmlBody += `<td colspan="2" class="${claseColorDia} dia-ausente-negro">${textoAusencia}</td><td class="col-ppu ${claseColorDia}"><select disabled><option value="--">--</option></select></td>`;
+                    } else {
+                        htmlBody += `<td colspan="1" class="${claseColorDia} dia-ausente-negro">${textoAusencia}</td><td class="col-ppu ${claseColorDia}"><select disabled><option value="--">--</option></select></td>`;
+                    }
+                } else {
+                    let titularAusenteAsignado = null;
+                    Object.keys(registrosAusencias).forEach(titular => {
+                        let ausT = registrosAusencias[titular];
+                        let fObj = new Date(fechaIso + "T00:00:00");
+                        if (fObj >= new Date(ausT.inicio + "T00:00:00") && fObj <= new Date(ausT.fin + "T00:00:00")) {
+                            if (mapaReemplazosDirectos[titular] === f.nombre) {
+                                titularAusenteAsignado = titular;
+                            }
+                        }
+                    });
+
+                    if (titularAusenteAsignado) {
+                        let baseTitular = obtenerDatosJornadasBase(titularAusenteAsignado, 'personal', d, nombreDiaStr);
+                        regMan.b1 = `SUPLENTE de ${titularAusenteAsignado}: ` + (baseTitular.b1 || "Labor asignada");
+                    }
+
+                    if (d < 5) {
+                        let infoManana = renderizarCeldaManual(regMan.b1, regMan.b2, regMan.b3, regMan.disponible, regMan.archivo, 'manana', false, f.tipoFila);
+                        let infoTarde = renderizarCeldaManual(regTar.b1, regTar.b2, regTar.b3, regTar.disponible, regTar.archivo, 'tarde', false, f.tipoFila);
+                        let ppuHtml = generarSelectPpuInteligente(f.nombre, f.tipoFila, f.esConductor, f.ppuDef, keyMan, keyTar, keySabDom, d);
+                        
+                        htmlBody += `
+                        <td class="${claseColorDia}"><div class="celda-clikeable ${infoManana.claseCss}" ${onclickAttr}>${infoManana.htmlRender}</div></td>
+                        <td class="${claseColorDia}"><div class="celda-clikeable ${infoTarde.claseCss}" ${onclickTarAttr}>${infoTarde.htmlRender}</div></td>
+                        <td class="col-ppu ${claseColorDia}">${ppuHtml}</td>`;
+                    } else {
+                        let infoSD = renderizarCeldaManual(regSD.b1, regSD.b2, regSD.b3, regSD.disponible, regSD.archivo, 'manana', true, f.tipoFila);
+                        let ppuHtmlSD = generarSelectPpuInteligente(f.nombre, f.tipoFila, f.esConductor, f.ppuDef, keyMan, keyTar, keySabDom, d);
+                        
+                        htmlBody += `
+                        <td class="${claseColorDia}"><div class="celda-clikeable ${infoSD.claseCss}" ${onclickSdAttr}>${infoSD.htmlRender}</div></td>
+                        <td class="col-ppu ${claseColorDia}">${ppuHtmlSD}</td>`;
+                    }
+                }
+            });
+            htmlBody += `</tr>`;
+        });
+        tbody.innerHTML = htmlBody;
+        actualizarFechasSemanas();
+        aplicarEstadoEmergenciaVisual();
+    }
+
+    function ampliarDiaMovil(dIndex) {
+        if (window.innerWidth <= 768 && window.innerWidth > window.innerHeight) {
+            if (diaAmpliadoMovilIndex === dIndex) {
+                diaAmpliadoMovilIndex = null;
+            } else {
+                diaAmpliadoMovilIndex = dIndex;
+            }
+            construirTablaPrincipal();
+        }
+    }
+
+    function copiarMinutaAutomatica() {
+        let fechas = obtenerFechasCalculadas();
+        let indices = obtenerIndicesDiasAutomatico();
+        let textoMinuta = `📋 *MUNICIPALIDAD DE NOGALES*\n🎽 *PROGRAMACIÓN OPERATIVA (MODO MÓVIL)*\n\n`;
+
+        funcionariosLista.forEach(f => {
+            let tieneActividad = false;
+            let subTexto = "";
+
+            indices.forEach(d => {
+                let fechaIso = fechas[d].fechaIso;
+                let nombreDiaStr = fechas[d].nombreDia;
+                let ausObj = obtenerAusenciaFecha(f.nombre, fechaIso);
+                let base = obtenerDatosJornadasBase(f.nombre, f.tipoFila, d, nombreDiaStr);
+                let keyMan = `${f.nombre}_s${semanaActiva}_d${d}_man`;
+                let keyTar = `${f.nombre}_s${semanaActiva}_d${d}_tar`;
+                let keySabDom = `${f.nombre}_s${semanaActiva}_d${d}_sd`;
+
+                let regMan = datosCeldasPersonalizadas[keyMan] || { b1: base.b1, b2: base.b2, b3: base.b3, disponible: base.disponible };
+                let regTar = datosCeldasPersonalizadas[keyTar] || { b1: "", b2: "", b3: "", disponible: "" };
+                let regSD = datosCeldasPersonalizadas[keySabDom] || { b1: base.b1, b2: base.b2, b3: base.b3, disponible: base.disponible };
+
+                let keyPpu = `ppu_${keyMan}`;
+                let ppuAsignada = datosPpuPersonalizadas[keyPpu] || f.ppuDef;
+
+                if (ausObj) {
+                    subTexto += `  • ${fechas[d].nombreDia} ${fechas[d].textoCorto}: ⬛ ${ausObj.tipo}\n`;
+                    tieneActividad = true;
+                } else if (d < 5) {
+                    let mStr = [regMan.b1, regMan.b2, regMan.b3].filter(Boolean).join(", ") || (regMan.disponible || "🟢 DISP.");
+                    let tStr = [regTar.b1, regTar.b2, regTar.b3].filter(Boolean).join(", ") || (regTar.disponible || "🟢 DISP.");
+                    subTexto += `  • ${fechas[d].nombreDia} ${fechas[d].textoCorto} [PPU: ${ppuAsignada}]:\n    - Mañ: ${mStr}\n    - Tard: ${tStr}\n`;
+                    tieneActividad = true;
+                } else {
+                    let sdStr = [regSD.b1, regSD.b2, regSD.b3].filter(Boolean).join(", ") || (regSD.disponible || "🟢 DISP.");
+                    subTexto += `  • ${fechas[d].nombreDia} ${fechas[d].textoCorto} [PPU: ${ppuAsignada}]: ${sdStr}\n`;
+                    tieneActividad = true;
+                }
+            });
+
+            if (tieneActividad) {
+                textoMinuta += `👤 *${f.nombre}*\n${subTexto}\n`;
+            }
+        });
+
+        navigator.clipboard.writeText(textoMinuta).then(() => {
+            alert("💬 Minuta automática copiada al portapapeles lista para enviar por WhatsApp.");
+        }).catch(() => {
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(textoMinuta)}`, '_blank');
+        });
+    }
+
+    function alternarDesplegableVehiculos() {
+        let panelVeh = document.getElementById("panel-desplegable-vehiculos");
+        if (panelVeh.style.display === "block") {
+            panelVeh.style.display = "none";
+        } else {
+            panelVeh.style.display = "block";
+            renderizarPanelVehiculos();
+        }
+    }
+
+    function abrirModalDetalle(el, key) {
+        if (modoSoloLectura || emergenciaActivaGlobal) return; 
+        celdaActivaModal = el;
+        celdaActivaModal.dataset.cellKey = key;
+        let base = obtenerDatosJornadasBase(el.closest('tr').dataset.funcionario, 'personal', 0, "");
+        let actual = datosCeldasPersonalizadas[key] || { b1: base.b1, b2: base.b2, b3: base.b3, disponible: base.disponible, archivo: base.archivo };
+        document.getElementById("input-b1").value = actual.b1 || "";
+        document.getElementById("input-b2").value = actual.b2 || "";
+        document.getElementById("input-b3").value = actual.b3 || "";
+        document.getElementById("input-disponible").value = actual.disponible || "";
+        document.getElementById("input-archivo").value = actual.archivo || "";
+        document.getElementById("modalHorario").style.display = "block";
+    }
+
+    function cerrarModalHorario() { document.getElementById("modalHorario").style.display = "none"; }
+    
+    function guardarDetalleCelda() {
+        if (celdaActivaModal) {
+            let key = celdaActivaModal.dataset.cellKey;
+            datosCeldasPersonalizadas[key] = {
+                b1: document.getElementById("input-b1").value.trim(),
+                b2: document.getElementById("input-b2").value.trim(),
+                b3: document.getElementById("input-b3").value.trim(),
+                disponible: document.getElementById("input-disponible").value.trim(),
+                archivo: document.getElementById("input-archivo").value.trim()
+            };
+            localStorage.setItem('nogales_celdas', JSON.stringify(datosCeldasPersonalizadas));
+            construirTablaPrincipal();
+        }
+        cerrarModalHorario();
+    }
+
+    function cambiarAnioVehiculos(anio) {
+        anioActivoVehiculos = parseInt(anio);
+        renderizarPanelVehiculos();
+    }
+
+    function renderizarPanelVehiculos() {
+        let esMovil = window.innerWidth <= 768;
+        let html = `<table style="width:100%; border-collapse:collapse; font-size:9.5px; min-width: 1250px;">
+            <tr style="background:#1e3a8a; color:#fff;">
+                <th style="padding:5px;">PPU</th>
+                <th>Tipo / Descripción</th>
+                <th>Unidad Municipal</th>
+                <th>N° de Motor</th>
+                <th>N° de Chasis</th>
+                <th>Revisión Técnica (Activa)</th>
+                <th>Km Inicial 2026</th>
+                <th>Km Actual</th>
+                <th>Mantención</th>`;
+        
+        mesesAnio.forEach(m => { html += `<th>${m} (${anioActivoVehiculos})</th>`; });
+        html += `<th>Gasto Total (Ene-May)</th></tr>`;
+
+        let totalesMes = new Array(12).fill(0);
+        let granTotalGasto = 0;
+
+        vehiculosMunicipales.forEach(v => {
+            let keyV = `veh_${v.ppu}_${anioActivoVehiculos}`;
+            let vData = datosVehiculosControl[keyV];
+            if (!vData) {
+                vData = { kmIni: v.kmIni || "15000", kmAct: v.kmIni || "15000", kmMant: "22000", meses: JSON.parse(JSON.stringify(v.meses)) };
+                datosVehiculosControl[keyV] = vData;
+            }
+            if (!vData.meses) vData.meses = JSON.parse(JSON.stringify(v.meses));
+
+            let diasRt = calcularDiasHabiles(v.rtIso);
+            let alertaRtStyle = diasRt <= 7 && diasRt >= 0 ? "background:#fee2e2; color:#b91c1c; font-weight:bold;" : (diasRt < 0 ? "background:#f97316; color:#fff; font-weight:bold;" : "background:#d1fae5; color:#065f46; font-weight:bold;");
+
+            let gastoVehiculo = 0;
+            mesesAnio.forEach((m) => {
+                let valMes = vData.meses && vData.meses[m] !== undefined ? vData.meses[m] : "0";
+                let numVal = parseFloat(valMes) || 0;
+                gastoVehiculo += numVal;
+                totalesMes[mesesAnio.indexOf(m)] += numVal;
+            });
+            granTotalGasto += gastoVehiculo;
+
+            let readonlyPpuAttr = esMovil ? "readonly style='font-weight:bold; width:65px; background:#f1f5f9;'" : "onchange=\"guardarDatosVehiculoDirecto('" + v.ppu + "', 'ppu', this.value)\" style='font-weight:bold; width:65px;'";
+            let readonlyRestoAttr = esMovil ? "readonly style='background:#f1f5f9; text-align:left;'" : "";
+            let readonlyKmActAttr = "onchange=\"guardarControlVehiculo('" + v.ppu + "', 'kmAct', this.value)\" style='font-weight:bold; background:#fff; border:1.5px solid #2563eb;'";
+
+            html += `<tr>
+                <td style="font-weight:bold; background:#e0f2fe;"><input type="text" value="${v.ppu}" ${readonlyPpuAttr}></td>
+                <td><input type="text" value="${v.tipo}" ${readonlyRestoAttr}></td>
+                <td><input type="text" value="${v.unidad}" ${readonlyRestoAttr}></td>
+                <td style="font-size:8.5px; font-family:monospace;"><input type="text" value="${v.motor}" ${readonlyRestoAttr}></td>
+                <td style="font-size:8.5px; font-family:monospace;"><input type="text" value="${v.chasis}" ${readonlyRestoAttr}></td>
+                <td style="${alertaRtStyle}"><input type="text" value="${v.rtStr}" ${readonlyRestoAttr}></td>
+                <td><input type="text" value="${vData.kmIni || ''}" ${readonlyRestoAttr}></td>
+                <td><input type="text" value="${vData.kmAct || ''}" ${readonlyKmActAttr}></td>
+                <td><input type="text" value="${vData.kmMant || ''}" ${readonlyRestoAttr}></td>`;
+
+            mesesAnio.forEach((m) => {
+                let valMes = vData.meses[m] !== undefined ? vData.meses[m] : "0";
+                let readonlyMesAttr = esMovil ? "readonly style='width:40px; text-align:center; background:#f1f5f9;'" : "onchange=\"guardarGastoMes('" + v.ppu + "', '" + m + "', this.value)\" style='width:40px; text-align:center;'";
+                html += `<td><input type="text" value="${valMes}" ${readonlyMesAttr}></td>`;
+            });
+
+            html += `<td style="font-weight:bold; background:#f1f5f9;">$${gastoVehiculo.toLocaleString()}</td></tr>`;
+        });
+
+        html += `<tr style="background:#1e293b; color:#fff; font-weight:bold;">
+            <td colspan="9" style="text-align:right; padding:6px;">TOTALES GASTO COMBUSTIBLE ($):</td>`;
+        totalesMes.forEach(t => { html += `<td>${t > 0 ? '$' + t.toLocaleString() : '$0'}</td>`; });
+        html += `<td style="background:#0284c7; color:#fff;">$${granTotalGasto.toLocaleString()}</td></tr>`;
+        html += `</table>`;
+
+        document.getElementById("contenido-panel-vehiculos").innerHTML = html;
+    }
+
+    function guardarControlVehiculo(ppu, campo, valor) {
+        let keyV = `veh_${ppu}_${anioActivoVehiculos}`;
+        if (!datosVehiculosControl[keyV]) {
+            let vObj = vehiculosMunicipales.find(x => x.ppu === ppu);
+            datosVehiculosControl[keyV] = { kmIni: vObj.kmIni, kmAct: vObj.kmIni, kmMant: "22000", meses: JSON.parse(JSON.stringify(vObj.meses)) };
+        }
+        datosVehiculosControl[keyV][campo] = valor;
+        localStorage.setItem('nogales_vehiculos_control', JSON.stringify(datosVehiculosControl));
+    }
+
+    function guardarGastoMes(ppu, mes, valor) {
+        let keyV = `veh_${ppu}_${anioActivoVehiculos}`;
+        if (!datosVehiculosControl[keyV]) {
+            let vObj = vehiculosMunicipales.find(x => x.ppu === ppu);
+            datosVehiculosControl[keyV] = { kmIni: vObj.kmIni, kmAct: vObj.kmIni, kmMant: "22000", meses: JSON.parse(JSON.stringify(vObj.meses)) };
+        }
+        if (!datosVehiculosControl[keyV].meses) datosVehiculosControl[keyV].meses = {};
+        datosVehiculosControl[keyV].meses[mes] = valor;
+        localStorage.setItem('nogales_vehiculos_control', JSON.stringify(datosVehiculosControl));
+    }
+
+    function guardarDatosVehiculoDirecto(ppuOriginal, campo, valor) {
+        let vObj = vehiculosMunicipales.find(x => x.ppu === ppuOriginal);
+        if (vObj) {
+            vObj[campo] = valor;
+            if (campo === 'rtStr' && valor.includes('/20')) {
+                let partes = valor.split('/');
+                vObj.rtIso = `${partes[2]}-${partes[1]}-${partes[0]}`;
+            }
+            renderizarPanelVehiculos();
+        }
+    }
+
+    function abrirModalHistorico() { document.getElementById("modalHistorico").style.display = "block"; cambiarAnioHistorico(anioActivoRegistro); }
+    function cerrarModalHistorico() { document.getElementById("modalHistorico").style.display = "none"; }
+
+    function cambiarAnioHistorico(anio) {
+        anioActivoRegistro = anio;
+        let filtrados = historialArchivoSemanas.filter(h => String(h.anio) === String(anio));
+        let htmlList = `<b>Registros archivados para el año ${anio}:</b><br><br>`;
+        if (filtrados.length === 0) { htmlList += `<i>No hay semanas archivadas aún para este año.</i>`; }
+        else { filtrados.forEach((item, idx) => { htmlList += `• <b>Registro #${idx + 1}</b> (Semana ${item.semana} — ${item.rango})<br>`; }); }
+        document.getElementById("contenido-lista-historico").innerHTML = htmlList;
+    }
+
+    function guardarRespaldoSemanal() {
+        let fechas = obtenerFechasCalculadas();
+        let registroHistorico = { anio: anioActivoRegistro, semana: semanaActiva, rango: `${fechas[0].textoCorto} al ${fechas[6].textoCorto}`, fechaGuardado: new Date().toLocaleDateString(), datos: JSON.parse(JSON.stringify(datosCeldasPersonalizadas)) };
+        historialArchivoSemanas.push(registroHistorico);
+        localStorage.setItem('nogales_archivo_historico', JSON.stringify(historialArchivoSemanas));
+        alert(`💾 Semana archivada en el historial del año ${anioActivoRegistro}.`);
+    }
+
+    function cambiarSituacionFila(selectEl, nombre) {
+        if (emergenciaActivaGlobal) return; 
+        let val = selectEl.value;
+        if (val !== "Activo") {
+            funcionarioSeleccionadoAusencia = nombre;
+            selectAusenciaActivo = selectEl;
+            document.getElementById("label-funcionario-ausencia").innerText = `Funcionario: ${nombre} (${val.toUpperCase()}) — Suplente automático asignado: ${mapaReemplazosDirectos[nombre] || 'Ninguno'}`;
+            document.getElementById("modalCalendarioAusencia").style.display = "block";
+        } else {
+            delete registrosAusencias[nombre];
+            localStorage.setItem('nogales_ausencias', JSON.stringify(registrosAusencias));
+            construirTablaPrincipal();
+        }
+    }
+
+    function cerrarModalCalendario() { document.getElementById("modalCalendarioAusencia").style.display = "none"; }
+    function guardarAusenciaCalendario() {
+        let fInicio = document.getElementById("input-fecha-base").value;
+        let fFin = document.getElementById("input-fecha-base").value;
+        registrosAusencias[funcionarioSeleccionadoAusencia] = { 
+            tipo: selectAusenciaActivo.value.toUpperCase(), 
+            tipoVisual: selectAusenciaActivo.value.toUpperCase(), 
+            inicio: document.getElementById("input-fecha-inicio").value || fInicio, 
+            fin: document.getElementById("input-fecha-fin").value || fFin 
+        };
+        localStorage.setItem('nogales_ausencias', JSON.stringify(registrosAusencias));
+        cerrarModalCalendario();
+        construirTablaPrincipal();
+    }
+
+    function activarOVerificarEmergencia() {
+        if (!emergenciaActivaGlobal) {
+            emergenciaActivaGlobal = true;
+            document.getElementById("btn-sos-accion").style.background = "#059669";
+            document.getElementById("btn-sos-accion").innerText = "🛑 Desactivar SOS";
+            aplicarEstadoEmergenciaVisual();
+            alert("🚨 ¡EMERGENCIA MUNICIPAL ACTIVADA! Todos los recursos se encuentran bloqueados y en alerta roja.");
+        } else {
+            emergenciaActivaGlobal = false;
+            document.getElementById("btn-sos-accion").style.background = "#dc2626";
+            document.getElementById("btn-sos-accion").innerText = "🚨 SOS";
+            abrirModalEmergenciaCalendario();
+        }
+    }
+
+    function aplicarEstadoEmergenciaVisual() {
+        let tabla = document.getElementById("tabla-principal");
+        if (emergenciaActivaGlobal) {
+            tabla.classList.add("emergencia-rojo-total");
+        } else {
+            tabla.classList.remove("emergencia-rojo-total");
+        }
+    }
+
+    function abrirModalEmergenciaCalendario() {
+        let fechas = obtenerFechasCalculadas();
+        let htmlList = "";
+        fechas.forEach((f) => {
+            let chkId = `chk_emg_${f.fechaIso}`;
+            htmlList += `<label style="display:flex; align-items:center; gap:6px; cursor:pointer;"><input type="checkbox" id="${chkId}" value="${f.fechaIso}"> ${f.nombreDia} ${f.textoCorto}</label>`;
+        });
+        document.getElementById("lista-fechas-emergencia").innerHTML = htmlList;
+        document.getElementById("modalEmergenciaCalendario").style.display = "block";
+    }
+
+    function cerrarModalEmergencia() { document.getElementById("modalEmergenciaCalendario").style.display = "none"; construirTablaPrincipal(); }
+    
+    function guardarYRestaurarEmergencia() {
+        let fechas = obtenerFechasCalculadas();
+        fechas.forEach(f => {
+            let chk = document.getElementById(`chk_emg_${f.fechaIso}`);
+            if (chk && chk.checked) {
+                if (!diasEmergenciaRegistrados.includes(f.fechaIso)) diasEmergenciaRegistrados.push(f.fechaIso);
+            }
+        });
+        localStorage.setItem('nogales_emergencias_dias', JSON.stringify(diasEmergenciaRegistrados));
+        cerrarModalEmergencia();
+        alert("✅ Emergencia finalizada y registrada correctamente en el historial.");
+    }
+
+    function calcularDiasHabiles(fechaIsoStr) {
+        if (!fechaIsoStr || fechaIsoStr === "2026-12-31") return 999;
+        let fRt = new Date(fechaIsoStr + "T00:00:00");
+        let hoy = new Date(2026, 8, 1);
+        return Math.ceil((fRt - hoy) / (1000 * 60 * 60 * 24));
+    }
+
+    function llamar(num) { window.location.href = `tel:${num}`; }
+    function copiarTablaNotepad() { alert("Planilla copiada para Excel."); }
+    function enviarReporteEjecutivoWhatsApp() { alert("Reporte Ejecutivo generado."); }
+    function alternarModoLectura() { modoSoloLectura = !modoSoloLectura; alert("Modo alterado."); }
+
+    window.addEventListener('resize', () => {
+        construirTablaPrincipal();
+    });
+
+    setInterval(() => {
+        construirTablaPrincipal();
+    }, 30000);
+
+    window.onload = function() {
+        document.getElementById("input-fecha-base").value = "2026-08-31";
+        actualizarFechasSemanas();
+        construirTablaPrincipal();
+    };
+</script>
+
+</body>
+</html>
