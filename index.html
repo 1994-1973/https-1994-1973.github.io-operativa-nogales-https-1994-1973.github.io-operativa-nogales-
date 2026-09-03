@@ -1,3 +1,4 @@
+HTML
 <!DOCTYPE html>
 <html lang="es" oncontextmenu="return false;">
 <head>
@@ -55,10 +56,10 @@
         button:hover { filter: brightness(0.9); }
         button.primary { background: #2563eb; color: #fff; border: none; }
         button.historico { background: #7c3aed; color: #fff; border: none; }
-        button.modo-lectura { background: #16a34a; color: #fff; border: none; }
         button.sos { background: #dc2626; color: #fff; border: none; animation: pulse 1.5s infinite; }
         button.whatsapp-btn { background: #16a34a; color: #fff; border: none; font-size: 11px; }
         button.executive-btn { background: #0284c7; color: #fff; border: none; font-size: 11px; }
+        button.admin-mode-btn { background: #d97706; color: #fff; border: none; font-weight: bold; }
         
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
         @keyframes parpadeoUrgente10min { 0% { background-color: #fef08a; border-color: #ca8a04; } 50% { background-color: #fecaca; border-color: #dc2626; } 100% { background-color: #fef08a; border-color: #ca8a04; } }
@@ -74,6 +75,21 @@
         th, td { border: 1px solid #000000; padding: 3px 2px; text-align: center; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         th { background: #1e3a8a; color: #ffffff; font-weight: bold; position: sticky; top: 0; z-index: 10; font-size: 10px; }
         
+        @media (max-width: 768px) {
+            th.col-nombre, td.col-nombre {
+                position: sticky;
+                left: 30px;
+                z-index: 5;
+                background-color: #f1f5f9;
+            }
+            th.col-num, td.col-num {
+                position: sticky;
+                left: 0px;
+                z-index: 5;
+                background-color: #f1f5f9;
+            }
+        }
+
         th.col-num, td.col-num { width: 30px; min-width: 30px; }
         th.col-nombre, td.col-nombre { width: 140px; min-width: 140px; text-align: left; padding-left: 4px; }
         th.col-tel, td.col-tel { width: 38px; min-width: 38px; }
@@ -182,7 +198,7 @@
 <div class="tabs-container">
     <button class="tab-btn" id="btn-semana-1" onclick="cambiarSemanaActiva(1)">📅 Semana 1 (7 Días)</button>
     <button class="tab-btn" id="btn-semana-2" onclick="cambiarSemanaActiva(2)">📅 Semana 2 (7 Días)</button>
-    <button class="tab-btn active" id="btn-modo-auto" style="background:#16a34a; color:#fff; cursor:default;">📱 Móvil Acordado (Vert: 1 Día deslizable | Horiz: Bloque 3 Días c/ Doble Clic)</button>
+    <button class="tab-btn active" id="btn-modo-auto" style="background:#16a34a; color:#fff; cursor:default;">📱 Visualización Adaptativa por Orientación Activa</button>
 </div>
 
 <div class="toolbar-container">
@@ -191,11 +207,11 @@
         <span id="label-dia-actual" style="color:#2563eb; margin-left: 5px;">Base: 31/08</span>
     </div>
     <div class="botones-group">
+        <button class="admin-mode-btn" id="btn-modo-admin-global" onclick="alternarModoAdministradorGlobal()">🔒 Modo Admin (Bloqueado)</button>
         <button class="primary btn-ocultar-movil" onclick="copiarTablaNotepad()">📋 Copiar a Excel</button>
         <button onclick="alternarDesplegableVehiculos()" style="background:#0284c7; color:#fff; font-weight:bold;">🚗 Datos de Vehículos</button>
-        <button class="historico btn-ocultar-movil" onclick="guardarRespaldoSemanal()">💾 Archivar Semana</button>
+        <button class="historico btn-ocultar-movil" onclick="ejecutarAccionAdmin('respaldo')">💾 Archivar Semana</button>
         <button class="historico btn-ocultar-movil" onclick="abrirModalHistorico()" style="background:#5b21b6;">📂 Historial</button>
-        <button class="modo-lectura btn-ocultar-movil" id="btn-estado-modo" onclick="alternarModoLectura()">👁️ Modo Activo</button>
         <button class="whatsapp-btn btn-ocultar-movil" onclick="copiarMinutaAutomatica()" style="background:#16a34a; font-weight:bold;">💬 Copiar Minuta</button>
         <button class="executive-btn btn-ocultar-movil" onclick="enviarReporteEjecutivoWhatsApp()" style="background:#0284c7; font-weight:bold;">📱 Reporte Ejecutivo</button>
         <button class="sos" id="btn-sos-accion" onclick="activarOVerificarEmergencia()">🚨 SOS</button>
@@ -268,7 +284,7 @@
             <label style="font-size: 10px; font-weight: bold;">Fecha de Inicio: <input type="date" id="input-fecha-inicio" style="border: 1px solid #cbd5e1; padding: 4px; border-radius: 3px; width: 100%;"></label>
             <label style="font-size: 10px; font-weight: bold;">Fecha de Término: <input type="date" id="input-fecha-fin" style="border: 1px solid #cbd5e1; padding: 4px; border-radius: 3px; width: 100%;"></label>
         </div>
-        <div style="margin-top: 15px; text-align: right;"><button class="primary" onclick="guardarAusenciaCalendario()">Aplicar y Reemplazar</button></div>
+        <div style="margin-top: 15px; text-align: right;"><button class="primary" onclick="guardarAusencia()">Aplicar y Reemplazar</button></div>
     </div>
 </div>
 
@@ -281,9 +297,15 @@
             <label><b>Posibilidad 2 de Labor:</b> <input type="text" id="input-b2" placeholder="Ej: 15:00 a 19:30 - Labor 2" oninput="calcularDisponibilidadAuto()" style="border: 1px solid #cbd5e1; padding: 3px; width: 100%;"></label>
             <label><b>Posibilidad 3 de Labor:</b> <input type="text" id="input-b3" placeholder="Ej: Labor adicional" oninput="calcularDisponibilidadAuto()" style="border: 1px solid #cbd5e1; padding: 3px; width: 100%;"></label>
             <label><b>🟢 Disponible (Auto/Manual):</b> <input type="text" id="input-disponible" placeholder="Ej: 🟢 DISPONIBLE (11:30 a 14:00)" style="border: 1px solid #cbd5e1; padding: 3px; width: 100%;"></label>
-            <label><b>📎 Archivo o Fotografía Adjunta:</b> <input type="text" id="input-archivo" placeholder="Ej: Foto_Evidencia.jpg" style="border: 1px solid #cbd5e1; padding: 3px; width: 100%;"></label>
+            <label><b>📎 Archivo o Fotografía Adjunta:</b> 
+                <div style="display: flex; gap: 4px; align-items: center; margin-top: 2px;">
+                    <input type="text" id="input-archivo" placeholder="Ej: Foto_Evidencia.jpg" style="border: 1px solid #cbd5e1; padding: 3px; flex: 1; background: #fff;">
+                    <input type="file" id="selector-archivo-oculto" style="display: none;" onchange="manejarSeleccionArchivoModal(this)">
+                    <button type="button" onclick="document.getElementById('selector-archivo-oculto').click()" style="background: #0284c7; color: #fff; border: none; padding: 4px 8px; font-weight: bold; border-radius: 3px; cursor: pointer; white-space: nowrap;">📁 Seleccionar Archivo</button>
+                </div>
+            </label>
         </div>
-        <div style="margin-top: 12px; text-align: right;"><button class="primary" onclick="guardarDetalleCelda()">Guardar Cambios</button></div>
+        <div style="margin-top: 12px; text-align: right;"><button class="primary" id="btn-guardar-horario" onclick="guardarDetalleCelda()">Guardar Cambios</button></div>
     </div>
 </div>
 
@@ -326,11 +348,37 @@
     let anioActivoVehiculos = 2026;
     let semanaActiva = 1;
     let celdaActivaModal = null;
-    let modoSoloLectura = false;
+    let modoAdministradorActivo = false;
     let emergenciaActivaGlobal = false;
     let diasEmergenciaRegistrados = JSON.parse(localStorage.getItem('nogales_emergencias_dias') || '[]');
     let diaAmpliadoMovilIndex = null;
     
+    const CLAVE_ADMIN = "nogales1891";
+
+    function alternarModoAdministradorGlobal() {
+        if (!modoAdministradorActivo) {
+            let clave = prompt("🔐 MODO ADMINISTRADOR RESTRINGIDO\nIngrese la contraseña de administración (nogales1891):");
+            if (clave === null) return;
+            if (clave.trim() !== CLAVE_ADMIN) {
+                alert("❌ Contraseña incorrecta. Acceso denegado.");
+                return;
+            }
+            modoAdministradorActivo = true;
+            let btn = document.getElementById("btn-modo-admin-global");
+            btn.style.background = "#16a34a";
+            btn.innerText = "🔓 Modo Admin (Activado)";
+            alert("🔓 Modo Administrador activado. Ahora puedes realizar modificaciones y guardar cambios libremente.");
+            construirTablaPrincipal();
+        } else {
+            modoAdministradorActivo = false;
+            let btn = document.getElementById("btn-modo-admin-global");
+            btn.style.background = "#d97706";
+            btn.innerText = "🔒 Modo Admin (Bloqueado)";
+            alert("🔒 Modo Administrador bloqueado. La planilla vuelve a modo consulta.");
+            construirTablaPrincipal();
+        }
+    }
+
     let ausenciasInicialesDefecto = {
         "Miguel Manzur": { tipo: "DIA ADMINISTRATIVO", tipoVisual: "DÍA ADMINISTRATIVO", inicio: "2026-08-31", fin: "2026-08-31" },
         "Claudio Suarez": { tipo: "DIA ADMINISTRATIVO", tipoVisual: "DÍA ADMINISTRATIVO", inicio: "2026-08-31", fin: "2026-08-31" },
@@ -447,16 +495,11 @@
 
     function obtenerIndicesDiasAutomatico() {
         let esMovil = window.innerWidth <= 768;
-        if (!esMovil) {
-            return [0, 1, 2, 3, 4, 5, 6]; 
-        }
+        if (!esMovil) { return [0, 1, 2, 3, 4, 5, 6]; }
 
         let esHorizontal = window.innerWidth > window.innerHeight;
-        
         if (esHorizontal) {
-            if (diaAmpliadoMovilIndex !== null) {
-                return [diaAmpliadoMovilIndex];
-            }
+            if (diaAmpliadoMovilIndex !== null) return [diaAmpliadoMovilIndex];
             return [0, 1, 2];
         } else {
             let indiceHoy = 0;
@@ -467,9 +510,7 @@
             
             let diffTime = ahora - dBase;
             let diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            if (diffDays >= 0 && diffDays < 7) {
-                indiceHoy = diffDays;
-            }
+            if (diffDays >= 0 && diffDays < 7) indiceHoy = diffDays;
             return [indiceHoy];
         }
     }
@@ -503,36 +544,50 @@
     }
 
     function obtenerDatosJornadasBase(nombre, tipoFila, diaSemanaIndex, nombreDiaStr) {
-        if (nombre === "Carolina Suazo") return { b1: "08:00 a 14:00 - Apoyo Administrativo", b2: "", b3: "", disponible: "", archivo: "" };
-        if (nombre === "Fabiola Bernales") return { b1: "08:00 a 14:00 - Gestión Bodega", b2: "", b3: "", disponible: "", archivo: "" };
+        if (diaSemanaIndex >= 0 && diaSemanaIndex <= 4) {
+            if (nombre === "Carolina Suazo") return { b1: "08:00 a 14:00 - Apoyo Administrativo", b2: "15:00 a 19:00 - Apoyo Administrativo", b3: "", disponible: "", archivo: "" };
+            if (nombre === "Fabiola Bernales") return { b1: "08:00 a 14:00 - Gestión Bodega", b2: "15:00 a 19:00 - Gestión Bodega", b3: "", disponible: "", archivo: "" };
+            
+            if (nombre === "Jeremias Tapia") return { b1: "08:00 a 14:00 - Trabajo en terreno", b2: "15:00 a 19:00 - Trabajo en terreno", b3: "", disponible: "", archivo: "" };
+            if (nombre === "Sergio Saavedra") return { b1: "08:00 a 14:00 - Trabajo en terreno", b2: "15:00 a 19:00 - Trabajo en terreno", b3: "", disponible: "", archivo: "" };
 
-        if (nombre === "Freddy Suárez" && (nombreDiaStr === "Miércoles" || nombreDiaStr === "Jueves")) {
-            return { b1: "08:00 a 14:00 - Entrega de Agua Potable", b2: "", b3: "", disponible: "", archivo: "" };
+            if (nombre === "Gerardo Figueroa") return { b1: "06:30 a 09:30 Ruta", b2: "09:30 a 14:00 Disponible", b3: "", disponible: "15:00 a 18:30 en ruta", archivo: "" };
+            if (nombre === "Orlando Tapia") return { b1: "07:00 a 09:30 Ruta", b2: "09:30 a 11:30 Disponible", b3: "", disponible: "", archivo: "" };
+
+            if ((nombre === "Freddy Suárez" || nombre === "Eduardo Bernal") && (nombreDiaStr === "Miércoles" || nombreDiaStr === "Jueves")) {
+                return { b1: "08:00 a 14:00 - Entrega de Agua Potable", b2: "15:00 a 18:30 - Entrega de Agua Potable", b3: "", disponible: "", archivo: "" };
+            }
+
+            if (nombre === "Rodrigo Jara" && nombreDiaStr === "Martes") {
+                return { b1: "Apoyo Unidad de Medio Ambiente", b2: "Traslado de J.P.L. de Nogales y Egresos", b3: "", disponible: "", archivo: "" };
+            }
+
+            if (nombre === "Susana Vásquez" && nombreDiaStr === "Miércoles") {
+                return { b1: "08:00 a 14:00 - Traslado de Unidad de Veterinaria", b2: "", b3: "", disponible: "", archivo: "" };
+            }
+
+            if (nombre === "Alfonso Vera") return { b1: "05:00 a 11:30 - Traslado de Estudiantes", b2: "", b3: "", disponible: "🟢 DISPONIBLE (11:30 a 14:00)", archivo: "" };
+            if (nombre === "Miguel Manzur") return { b1: "08:00 a 14:00 - Apoyo Terreno", b2: "", b3: "", disponible: "", archivo: "" };
         }
 
+        // Filas permanentes: se liberan sábado y domingo (diaSemanaIndex >= 5) para no asignar tareas automáticas
         if (tipoFila === "alcaldia") {
-            if (diaSemanaIndex < 5) return { b1: "08:00 a 14:00 - Funciones propias del cargo", b2: "15:00 a 19:30 - Funciones propias del cargo", b3: "", disponible: "", archivo: "" };
+            if (diaSemanaIndex < 5) return { b1: "Funciones propias del cargo", b2: "", b3: "", disponible: "", archivo: "" };
             return { b1: "", b2: "", b3: "", disponible: "", archivo: "" };
         }
         if (tipoFila === "secplac") {
-            if (diaSemanaIndex < 5) return { b1: "08:00 a 14:00 - Labores en terreno", b2: "15:00 a 19:30 - Labores en terreno", b3: "", disponible: "", archivo: "" };
+            if (diaSemanaIndex < 5) return { b1: "Labores en terreno", b2: "", b3: "", disponible: "", archivo: "" };
             return { b1: "", b2: "", b3: "", disponible: "", archivo: "" };
         }
         if (tipoFila === "seguridad1" || tipoFila === "seguridad2") {
-            if (diaSemanaIndex < 5) return { b1: "08:00 a 14:00 - Fiscalización y Prevención", b2: "15:00 a 19:30 - Fiscalización y Prevención", b3: "", disponible: "", archivo: "" };
+            if (diaSemanaIndex < 5) return { b1: "Vigilancia y Prevención", b2: "", b3: "", disponible: "", archivo: "" };
             return { b1: "", b2: "", b3: "", disponible: "", archivo: "" };
         }
         if (tipoFila === "riesgos") {
-            if (diaSemanaIndex < 5) return { b1: "08:00 a 14:00 - Labores de Prevención en terreno", b2: "15:00 a 19:30 - Labores de Prevención en terreno", b3: "", disponible: "", archivo: "" };
+            if (diaSemanaIndex < 5) return { b1: "Prevención en terreno", b2: "", b3: "", disponible: "", archivo: "" };
             return { b1: "", b2: "", b3: "", disponible: "", archivo: "" };
         }
-        
-        if (diaSemanaIndex >= 0 && diaSemanaIndex <= 4) {
-            if (nombre === "Alfonso Vera") return { b1: "05:00 a 11:30 - Traslado de Estudiantes", b2: "", b3: "", disponible: "🟢 DISPONIBLE (11:30 a 14:00)", archivo: "" };
-            if (nombre === "Gerardo Figueroa") return { b1: "07:00 a 08:30 - Bus Escolar Mañana", b2: "", b3: "", disponible: "", archivo: "" };
-            if (nombre === "Orlando Tapia") return { b1: "07:00 a 08:30 - Bus Escolar", b2: "", b3: "", disponible: "", archivo: "" };
-            if (nombre === "Miguel Manzur") return { b1: "08:00 a 14:00 - Apoyo Terreno", b2: "", b3: "", disponible: "", archivo: "" };
-        } 
+
         return { b1: "", b2: "", b3: "", disponible: "", archivo: "" };
     }
 
@@ -549,24 +604,46 @@
             let minutosFinLab = parseInt(partesFin[0]) * 60 + parseInt(partesFin[1]);
             let diferenciaMinutos = minutosFinLab - minutosActuales;
 
-            if (diferenciaMinutos > 0 && diferenciaMinutos <= 10) {
-                return true;
-            }
+            if (diferenciaMinutos > 0 && diferenciaMinutos <= 10) return true;
         }
         return false;
     }
 
-    function renderizarCeldaManual(b1, b2, b3, disponible, archivo, tipoJornada, esSabDom, tipoFila) {
+    function renderizarCeldaManual(b1, b2, b3, disponible, archivo, tipoJornada, esSabDom, tipoFila, regManOp) {
         let tareas = [b1, b2, b3].filter(t => t && t.trim() !== "");
         let tieneDisp = disponible && disponible.trim() !== "";
         let tieneArchivo = archivo && archivo.trim() !== "";
+
+        if (tipoJornada === 'tarde' && regManOp) {
+            let tareasManana = [regManOp.b1, regManOp.b2, regManOp.b3].filter(t => t && t.trim() !== "");
+            if (tareasManana.length > 0 && tareas.length === 0 && !tieneDisp) {
+                let cruzaTarde = false;
+                let regexTime = /(\d{2}:\d{2})\s*a\s*(\d{2}:\d{2})/g;
+                tareasManana.forEach(t => {
+                    let match;
+                    while ((match = regexTime.exec(t)) !== null) {
+                        let partesFin = match[2].split(':');
+                        let minFin = parseInt(partesFin[0]) * 60 + parseInt(partesFin[1]);
+                        if (minFin > 840) { // 840 minutos = 14:00 horas
+                            cruzaTarde = true;
+                        }
+                    }
+                });
+
+                if (cruzaTarde) {
+                    return { htmlRender: "Jornada continua / Asignado", claseCss: "celda-con-labor", tieneLabor: true };
+                } else {
+                    return { htmlRender: "🟢 DISPONIBLE (15:00-19:30)", claseCss: "celda-disponible", tieneLabor: false };
+                }
+            }
+        }
 
         let textoCompletoLabores = tareas.join(" ");
         let esUrgente10Min = verificarAlerta10Minutos(textoCompletoLabores);
 
         if (tareas.length === 0 && !tieneDisp) {
             const filasPermanentes = ["alcaldia", "secplac", "seguridad1", "seguridad2", "riesgos"];
-            if (filasPermanentes.includes(tipoFila) && tipoJornada === 'tarde') {
+            if (filasPermanentes.includes(tipoFila) && !esSabDom) {
                 return { htmlRender: "Funciones asignadas", claseCss: "celda-con-labor", tieneLabor: true };
             }
 
@@ -576,12 +653,8 @@
 
         let html = "";
         tareas.forEach(t => { html += `<div>${t}</div>`; });
-        if (tieneDisp) {
-            html += `<div style="color:#047857; font-weight:900;">${disponible}</div>`;
-        }
-        if (tieneArchivo) {
-            html += `<div style="font-size:9px; color:#1e3a8a;">📎 ${archivo}</div>`;
-        }
+        if (tieneDisp) html += `<div style="color:#047857; font-weight:900;">${disponible}</div>`;
+        if (tieneArchivo) html += `<div style="font-size:9px; color:#1e3a8a;">📎 ${archivo}</div>`;
 
         let clase = tareas.length > 0 ? (esUrgente10Min ? "celda-con-labor alerta-10min-termino" : "celda-con-labor") : "celda-disponible";
         return { htmlRender: html, claseCss: clase, tieneLabor: tareas.length > 0 };
@@ -640,8 +713,12 @@
         const personalBloqueadoPpu = ["Marcelo Chacana", "Carolina Suazo", "Fabiola Bernales", "Enzo Nuñez", "Julio Vergara", "Mario Cisternas", "Felipe Osorio", "Matias Fuentes"];
         const filasPermanentesPpu = ["alcaldia", "secplac", "seguridad1", "seguridad2", "riesgos"];
 
-        if (filasPermanentesPpu.includes(tipoFila)) {
-            return `<select disabled style="background:#e0f2fe; font-weight:bold; cursor:default;"><option value="${ppuDefecto}">${ppuDefecto}</option></select>`;
+        let disableAttr = modoAdministradorActivo ? "" : "disabled";
+        let estiloExtra = modoAdministradorActivo ? "background:#e0f2fe; font-weight:bold;" : "background:#f1f5f9; color:#94a3b8; cursor:not-allowed;";
+
+        // En filas permanentes, si es fin de semana (d >= 5), se permite manipular el select libremente en Modo Admin
+        if (filasPermanentesPpu.includes(tipoFila) && d < 5) {
+            return `<select ${disableAttr} style="${estiloExtra}"><option value="${ppuDefecto}">${ppuDefecto}</option></select>`;
         }
 
         if (!esConductor || personalBloqueadoPpu.includes(nombre)) {
@@ -663,7 +740,19 @@
         let keyPpu = `ppu_${keyMan}`;
         let ppuActual = datosPpuPersonalizadas[keyPpu] || (activoConLabor ? ppuDefecto : "--");
 
-        if (!activoConLabor) {
+        const filasInstitucionalesFijas = ["Alcaldia", "Secplac/DOM/Bien.", "Seguridad Pública (1)", "Seguridad Pública (2)", "Gestión de Riesgos"];
+        if ((filasInstitucionalesFijas.includes(nombre) && d < 5) || ppuDefecto !== "--") {
+            let ppuFijaVal = ppuDefecto;
+            let opcionesFijas = `<option value="${ppuFijaVal}" selected>${ppuFijaVal}</option>`;
+            vehiculosMunicipales.forEach(v => {
+                if (v.ppu !== ppuFijaVal) {
+                    opcionesFijas += `<option value="${v.ppu}">${v.ppu}</option>`;
+                }
+            });
+            return `<select ${disableAttr} onchange="guardarPpuCelda(this, '${keyPpu}')" ondblclick="mostrarDetallePpu(this.value)" style="${estiloExtra}">${opcionesFijas}</select>`;
+        }
+
+        if (!activoConLabor && !modoAdministradorActivo) {
             return `<select disabled style="background:#f1f5f9; color:#94a3b8; cursor:not-allowed;" title="Bloqueado: Funcionario Disponible"><option value="--">--</option></select>`;
         }
 
@@ -675,10 +764,11 @@
                 opciones += `<option value="${v.ppu}" ${sel}>${v.ppu}</option>`;
             }
         });
-        return `<select onchange="guardarPpuCelda(this, '${keyPpu}')" ondblclick="mostrarDetallePpu(this.value)" style="background:#e0f2fe; font-weight:bold;">${opciones}</select>`;
+        return `<select ${disableAttr} onchange="guardarPpuCelda(this, '${keyPpu}')" ondblclick="mostrarDetallePpu(this.value)" style="${estiloExtra}">${opciones}</select>`;
     }
 
     function guardarPpuCelda(selectEl, keyPpu) {
+        if (!modoAdministradorActivo) return;
         datosPpuPersonalizadas[keyPpu] = selectEl.value;
         localStorage.setItem('nogales_ppu', JSON.stringify(datosPpuPersonalizadas));
     }
@@ -715,8 +805,7 @@
             let nombreDiaStr = fechasSemanales[d].nombreDia;
             let esSabDom = d >= 5;
             let estiloTh = esSabDom ? `background:#1e3a8a; color:#fff;` : ``;
-
-            let ondblclickTh = esSabDom ? `` : `ondblclick="ampliarDiaMovil(${d})" title="Doble clic para ampliar o restaurar vista"`;
+            let ondblclickTh = esSabDom ? `` : `ondblclick="ampliarDiaMovil(${d})" title="Doble clic para ampliar o restaurar vista en horizontal"`;
 
             if (!esSabDom) {
                 htmlHeadTh1 += `<th colspan="3" id="th-d${d}" class="${colorClase}" style="${estiloTh} cursor:pointer;" ${ondblclickTh}>${nombreDiaStr} (${fechasSemanales[d].textoCorto}) 🔍</th>`;
@@ -737,14 +826,15 @@
 
         let htmlBody = "";
         funcionariosLista.forEach((f, index) => {
-            let num = f.tipoFila === "personal" ? (index + 1) : "—";
+            let num = index + 1;
             let tipoAusenciaActual = registrosAusencias[f.nombre] ? registrosAusencias[f.nombre].tipo : "ACTIVO";
             let letraSt = tipoAusenciaActual === "DIA ADMINISTRATIVO" ? "D" : (tipoAusenciaActual === "FERIADO LEGAL" ? "F" : (tipoAusenciaActual === "LICENCIA MEDICA" ? "L" : "A"));
             let claseEstado = tipoAusenciaActual === "DIA ADMINISTRATIVO" ? "status-admin" : (tipoAusenciaActual === "FERIADO LEGAL" ? "status-feriado" : (tipoAusenciaActual === "LICENCIA MEDICA" ? "status-licencia" : "status-activo"));
 
+            let disableStAttr = modoAdministradorActivo ? "" : "disabled style='cursor:default;'";
             let selectStHtml = esMovil ? 
-                `<select class="${claseEstado}" disabled style="cursor:default;"><option value="${tipoAusenciaActual}">${letraSt}</option></select>` :
-                `<select class="${claseEstado}" onchange="cambiarSituacionFila(this, '${f.nombre}')" title="Haz clic para cambiar situación">
+                `<select class="${claseEstado}" ${disableStAttr}><option value="${tipoAusenciaActual}">${letraSt}</option></select>` :
+                `<select class="${claseEstado}" ${disableStAttr} onchange="cambiarSituacionFila(this, '${f.nombre}')" title="Cambiar situación">
                     <option value="Activo" ${tipoAusenciaActual === "ACTIVO" ? "selected" : ""}>A</option>
                     <option value="Feriado legal" ${tipoAusenciaActual === "FERIADO LEGAL" ? "selected" : ""}>F</option>
                     <option value="Dia administrativo" ${tipoAusenciaActual === "DIA ADMINISTRATIVO" ? "selected" : ""}>D</option>
@@ -754,9 +844,7 @@
             let telHtml = "";
             if (Array.isArray(f.tel)) {
                 let opcionesTel = `<select style="background:#e0f2fe; font-weight:bold;"><option value="">📞 Teléfonos</option>`;
-                f.tel.forEach((tNum, tIdx) => {
-                    opcionesTel += `<option value="${tNum}">${f.labelTel[tIdx]}</option>`;
-                });
+                f.tel.forEach((tNum, tIdx) => { opcionesTel += `<option value="${tNum}">${f.labelTel[tIdx]}</option>`; });
                 opcionesTel += `</select>`;
                 telHtml = opcionesTel;
             } else {
@@ -786,13 +874,12 @@
                 let regTar = datosCeldasPersonalizadas[keyTar] || { b1: "", b2: "", b3: "", disponible: "", archivo: "" };
                 let regSD = datosCeldasPersonalizadas[keySabDom] || { b1: base.b1, b2: base.b2, b3: base.b3, disponible: base.disponible, archivo: base.archivo };
 
-                let onclickAttr = f.tipoFila !== "personal" ? `` : `onclick="abrirModalDetalle(this, '${keyMan}')"`;
-                let onclickTarAttr = f.tipoFila !== "personal" ? `` : `onclick="abrirModalDetalle(this, '${keyTar}')"`;
-                let onclickSdAttr = f.tipoFila !== "personal" ? `` : `onclick="abrirModalDetalle(this, '${keySabDom}')"`;
+                let onclickAttr = `onclick="abrirModalDetalle(this, '${keyMan}')"`;
+                let onclickTarAttr = `onclick="abrirModalDetalle(this, '${keyTar}')"`;
+                let onclickSdAttr = `onclick="abrirModalDetalle(this, '${keySabDom}')"`;
 
                 if (ausObj) {
                     let textoAusencia = ausObj.tipoVisual || ausObj.tipo;
-
                     if (d < 5) {
                         htmlBody += `<td colspan="2" class="${claseColorDia} dia-ausente-negro">${textoAusencia}</td><td class="col-ppu ${claseColorDia}"><select disabled><option value="--">--</option></select></td>`;
                     } else {
@@ -804,9 +891,7 @@
                         let ausT = registrosAusencias[titular];
                         let fObj = new Date(fechaIso + "T00:00:00");
                         if (fObj >= new Date(ausT.inicio + "T00:00:00") && fObj <= new Date(ausT.fin + "T00:00:00")) {
-                            if (mapaReemplazosDirectos[titular] === f.nombre) {
-                                titularAusenteAsignado = titular;
-                            }
+                            if (mapaReemplazosDirectos[titular] === f.nombre) titularAusenteAsignado = titular;
                         }
                     });
 
@@ -815,9 +900,17 @@
                         regMan.b1 = `SUPLENTE de ${titularAusenteAsignado}: ` + (baseTitular.b1 || "Labor asignada");
                     }
 
-                    if (d < 5) {
-                        let infoManana = renderizarCeldaManual(regMan.b1, regMan.b2, regMan.b3, regMan.disponible, regMan.archivo, 'manana', false, f.tipoFila);
-                        let infoTarde = renderizarCeldaManual(regTar.b1, regTar.b2, regTar.b3, regTar.disponible, regTar.archivo, 'tarde', false, f.tipoFila);
+                    const filasPermanentes = ["alcaldia", "secplac", "seguridad1", "seguridad2", "riesgos"];
+                    if (filasPermanentes.includes(f.tipoFila) && d < 5) {
+                        let infoInstitucional = renderizarCeldaManual(regMan.b1, regMan.b2, regMan.b3, regMan.disponible, regMan.archivo, 'manana', false, f.tipoFila, null);
+                        let ppuHtmlInst = generarSelectPpuInteligente(f.nombre, f.tipoFila, f.esConductor, f.ppuDef, keyMan, keyTar, keySabDom, d);
+                        
+                        htmlBody += `
+                        <td colspan="2" class="${claseColorDia}"><div class="celda-clikeable ${infoInstitucional.claseCss}" ${onclickAttr}>${infoInstitucional.htmlRender}</div></td>
+                        <td class="col-ppu ${claseColorDia}">${ppuHtmlInst}</td>`;
+                    } else if (d < 5) {
+                        let infoManana = renderizarCeldaManual(regMan.b1, regMan.b2, regMan.b3, regMan.disponible, regMan.archivo, 'manana', false, f.tipoFila, null);
+                        let infoTarde = renderizarCeldaManual(regTar.b1, regTar.b2, regTar.b3, regTar.disponible, regTar.archivo, 'tarde', false, f.tipoFila, regMan);
                         let ppuHtml = generarSelectPpuInteligente(f.nombre, f.tipoFila, f.esConductor, f.ppuDef, keyMan, keyTar, keySabDom, d);
                         
                         htmlBody += `
@@ -825,7 +918,7 @@
                         <td class="${claseColorDia}"><div class="celda-clikeable ${infoTarde.claseCss}" ${onclickTarAttr}>${infoTarde.htmlRender}</div></td>
                         <td class="col-ppu ${claseColorDia}">${ppuHtml}</td>`;
                     } else {
-                        let infoSD = renderizarCeldaManual(regSD.b1, regSD.b2, regSD.b3, regSD.disponible, regSD.archivo, 'manana', true, f.tipoFila);
+                        let infoSD = renderizarCeldaManual(regSD.b1, regSD.b2, regSD.b3, regSD.disponible, regSD.archivo, 'manana', true, f.tipoFila, null);
                         let ppuHtmlSD = generarSelectPpuInteligente(f.nombre, f.tipoFila, f.esConductor, f.ppuDef, keyMan, keyTar, keySabDom, d);
                         
                         htmlBody += `
@@ -843,12 +936,15 @@
 
     function ampliarDiaMovil(dIndex) {
         if (window.innerWidth <= 768 && window.innerWidth > window.innerHeight) {
-            if (diaAmpliadoMovilIndex === dIndex) {
-                diaAmpliadoMovilIndex = null;
-            } else {
-                diaAmpliadoMovilIndex = dIndex;
-            }
+            diaAmpliadoMovilIndex = (diaAmpliadoMovilIndex === dIndex) ? null : dIndex;
             construirTablaPrincipal();
+        }
+    }
+
+    function manejarSeleccionArchivoModal(inputEl) {
+        if (inputEl.files && inputEl.files[0]) {
+            let nombreArchivo = inputEl.files[0].name;
+            document.getElementById("input-archivo").value = nombreArchivo;
         }
     }
 
@@ -892,9 +988,7 @@
                 }
             });
 
-            if (tieneActividad) {
-                textoMinuta += `👤 *${f.nombre}*\n${subTexto}\n`;
-            }
+            if (tieneActividad) textoMinuta += `👤 *${f.nombre}*\n${subTexto}\n`;
         });
 
         navigator.clipboard.writeText(textoMinuta).then(() => {
@@ -906,31 +1000,42 @@
 
     function alternarDesplegableVehiculos() {
         let panelVeh = document.getElementById("panel-desplegable-vehiculos");
-        if (panelVeh.style.display === "block") {
-            panelVeh.style.display = "none";
-        } else {
-            panelVeh.style.display = "block";
-            renderizarPanelVehiculos();
-        }
+        panelVeh.style.display = (panelVeh.style.display === "block") ? "none" : "block";
+        if (panelVeh.style.display === "block") renderizarPanelVehiculos();
     }
 
     function abrirModalDetalle(el, key) {
-        if (modoSoloLectura || emergenciaActivaGlobal) return; 
         celdaActivaModal = el;
         celdaActivaModal.dataset.cellKey = key;
         let base = obtenerDatosJornadasBase(el.closest('tr').dataset.funcionario, 'personal', 0, "");
         let actual = datosCeldasPersonalizadas[key] || { b1: base.b1, b2: base.b2, b3: base.b3, disponible: base.disponible, archivo: base.archivo };
+        
         document.getElementById("input-b1").value = actual.b1 || "";
         document.getElementById("input-b2").value = actual.b2 || "";
         document.getElementById("input-b3").value = actual.b3 || "";
         document.getElementById("input-disponible").value = actual.disponible || "";
         document.getElementById("input-archivo").value = actual.archivo || "";
+        document.getElementById("selector-archivo-oculto").value = "";
+
+        let inputsModal = document.querySelectorAll("#modalHorario input");
+        let btnGuardar = document.getElementById("btn-guardar-horario");
+        
+        inputsModal.forEach(inp => {
+            if(inp.id !== "selector-archivo-oculto") {
+                inp.readOnly = !modoAdministradorActivo;
+                if(!modoAdministradorActivo) inp.style.background = "#f1f5f9";
+                else inp.style.background = "#fff";
+            }
+        });
+        btnGuardar.style.display = modoAdministradorActivo ? "inline-block" : "none";
+
         document.getElementById("modalHorario").style.display = "block";
     }
 
     function cerrarModalHorario() { document.getElementById("modalHorario").style.display = "none"; }
     
     function guardarDetalleCelda() {
+        if (!modoAdministradorActivo) return;
         if (celdaActivaModal) {
             let key = celdaActivaModal.dataset.cellKey;
             datosCeldasPersonalizadas[key] = {
@@ -942,6 +1047,7 @@
             };
             localStorage.setItem('nogales_celdas', JSON.stringify(datosCeldasPersonalizadas));
             construirTablaPrincipal();
+            alert("✅ Cambios guardados correctamente.");
         }
         cerrarModalHorario();
     }
@@ -952,7 +1058,6 @@
     }
 
     function renderizarPanelVehiculos() {
-        let esMovil = window.innerWidth <= 768;
         let html = `<table style="width:100%; border-collapse:collapse; font-size:9.5px; min-width: 1250px;">
             <tr style="background:#1e3a8a; color:#fff;">
                 <th style="padding:5px;">PPU</th>
@@ -992,25 +1097,24 @@
             });
             granTotalGasto += gastoVehiculo;
 
-            let readonlyPpuAttr = esMovil ? "readonly style='font-weight:bold; width:65px; background:#f1f5f9;'" : "onchange=\"guardarDatosVehiculoDirecto('" + v.ppu + "', 'ppu', this.value)\" style='font-weight:bold; width:65px;'";
-            let readonlyRestoAttr = esMovil ? "readonly style='background:#f1f5f9; text-align:left;'" : "";
-            let readonlyKmActAttr = "onchange=\"guardarControlVehiculo('" + v.ppu + "', 'kmAct', this.value)\" style='font-weight:bold; background:#fff; border:1.5px solid #2563eb;'";
+            let editAttr = modoAdministradorActivo ? "" : "readonly style='background:#f1f5f9;'";
+            let editKmAttr = modoAdministradorActivo ? "style='font-weight:bold; background:#fff; border:1.5px solid #2563eb;'" : "readonly style='background:#f1f5f9;'";
 
             html += `<tr>
-                <td style="font-weight:bold; background:#e0f2fe;"><input type="text" value="${v.ppu}" ${readonlyPpuAttr}></td>
-                <td><input type="text" value="${v.tipo}" ${readonlyRestoAttr}></td>
-                <td><input type="text" value="${v.unidad}" ${readonlyRestoAttr}></td>
-                <td style="font-size:8.5px; font-family:monospace;"><input type="text" value="${v.motor}" ${readonlyRestoAttr}></td>
-                <td style="font-size:8.5px; font-family:monospace;"><input type="text" value="${v.chasis}" ${readonlyRestoAttr}></td>
-                <td style="${alertaRtStyle}"><input type="text" value="${v.rtStr}" ${readonlyRestoAttr}></td>
-                <td><input type="text" value="${vData.kmIni || ''}" ${readonlyRestoAttr}></td>
-                <td><input type="text" value="${vData.kmAct || ''}" ${readonlyKmActAttr}></td>
-                <td><input type="text" value="${vData.kmMant || ''}" ${readonlyRestoAttr}></td>`;
+                <td style="font-weight:bold; background:#e0f2fe;"><input type="text" value="${v.ppu}" ${editAttr}></td>
+                <td><input type="text" value="${v.tipo}" ${editAttr}></td>
+                <td><input type="text" value="${v.unidad}" ${editAttr}></td>
+                <td style="font-size:8.5px; font-family:monospace;"><input type="text" value="${v.motor}" ${editAttr}></td>
+                <td style="font-size:8.5px; font-family:monospace;"><input type="text" value="${v.chasis}" ${editAttr}></td>
+                <td style="${alertaRtStyle}"><input type="text" value="${v.rtStr}" ${editAttr}></td>
+                <td><input type="text" value="${vData.kmIni || ''}" ${editAttr}></td>
+                <td><input type="text" value="${vData.kmAct || ''}" ${editKmAttr} onchange="guardarControlVehiculo('${v.ppu}', 'kmAct', this.value)"></td>
+                <td><input type="text" value="${vData.kmMant || ''}" ${editAttr}></td>`;
 
             mesesAnio.forEach((m) => {
                 let valMes = vData.meses[m] !== undefined ? vData.meses[m] : "0";
-                let readonlyMesAttr = esMovil ? "readonly style='width:40px; text-align:center; background:#f1f5f9;'" : "onchange=\"guardarGastoMes('" + v.ppu + "', '" + m + "', this.value)\" style='width:40px; text-align:center;'";
-                html += `<td><input type="text" value="${valMes}" ${readonlyMesAttr}></td>`;
+                let editMesAttr = modoAdministradorActivo ? "style='width:40px; text-align:center;'" : "readonly style='width:40px; text-align:center; background:#f1f5f9;'";
+                html += `<td><input type="text" value="${valMes}" ${editMesAttr} onchange="guardarGastoMes('${v.ppu}', '${m}', this.value)"></td>`;
             });
 
             html += `<td style="font-weight:bold; background:#f1f5f9;">$${gastoVehiculo.toLocaleString()}</td></tr>`;
@@ -1026,6 +1130,7 @@
     }
 
     function guardarControlVehiculo(ppu, campo, valor) {
+        if (!modoAdministradorActivo) return;
         let keyV = `veh_${ppu}_${anioActivoVehiculos}`;
         if (!datosVehiculosControl[keyV]) {
             let vObj = vehiculosMunicipales.find(x => x.ppu === ppu);
@@ -1036,6 +1141,7 @@
     }
 
     function guardarGastoMes(ppu, mes, valor) {
+        if (!modoAdministradorActivo) return;
         let keyV = `veh_${ppu}_${anioActivoVehiculos}`;
         if (!datosVehiculosControl[keyV]) {
             let vObj = vehiculosMunicipales.find(x => x.ppu === ppu);
@@ -1046,18 +1152,6 @@
         localStorage.setItem('nogales_vehiculos_control', JSON.stringify(datosVehiculosControl));
     }
 
-    function guardarDatosVehiculoDirecto(ppuOriginal, campo, valor) {
-        let vObj = vehiculosMunicipales.find(x => x.ppu === ppuOriginal);
-        if (vObj) {
-            vObj[campo] = valor;
-            if (campo === 'rtStr' && valor.includes('/20')) {
-                let partes = valor.split('/');
-                vObj.rtIso = `${partes[2]}-${partes[1]}-${partes[0]}`;
-            }
-            renderizarPanelVehiculos();
-        }
-    }
-
     function abrirModalHistorico() { document.getElementById("modalHistorico").style.display = "block"; cambiarAnioHistorico(anioActivoRegistro); }
     function cerrarModalHistorico() { document.getElementById("modalHistorico").style.display = "none"; }
 
@@ -1065,21 +1159,27 @@
         anioActivoRegistro = anio;
         let filtrados = historialArchivoSemanas.filter(h => String(h.anio) === String(anio));
         let htmlList = `<b>Registros archivados para el año ${anio}:</b><br><br>`;
-        if (filtrados.length === 0) { htmlList += `<i>No hay semanas archivadas aún para este año.</i>`; }
-        else { filtrados.forEach((item, idx) => { htmlList += `• <b>Registro #${idx + 1}</b> (Semana ${item.semana} — ${item.rango})<br>`; }); }
+        if (filtrados.length === 0) htmlList += `<i>No hay semanas archivadas aún para este año.</i>`;
+        else filtrados.forEach((item, idx) => { htmlList += `• <b>Registro #${idx + 1}</b> (Semana ${item.semana} — ${item.rango})<br>`; });
         document.getElementById("contenido-lista-historico").innerHTML = htmlList;
     }
 
-    function guardarRespaldoSemanal() {
-        let fechas = obtenerFechasCalculadas();
-        let registroHistorico = { anio: anioActivoRegistro, semana: semanaActiva, rango: `${fechas[0].textoCorto} al ${fechas[6].textoCorto}`, fechaGuardado: new Date().toLocaleDateString(), datos: JSON.parse(JSON.stringify(datosCeldasPersonalizadas)) };
-        historialArchivoSemanas.push(registroHistorico);
-        localStorage.setItem('nogales_archivo_historico', JSON.stringify(historialArchivoSemanas));
-        alert(`💾 Semana archivada en el historial del año ${anioActivoRegistro}.`);
+    function ejecutarAccionAdmin(accion) {
+        if (!modoAdministradorActivo) {
+            alert("🔒 Debes activar el 'Modo Admin' para realizar esta acción.");
+            return;
+        }
+        if (accion === 'respaldo') {
+            let fechas = obtenerFechasCalculadas();
+            let registroHistorico = { anio: anioActivoRegistro, semana: semanaActiva, rango: `${fechas[0].textoCorto} al ${fechas[6].textoCorto}`, fechaGuardado: new Date().toLocaleDateString(), datos: JSON.parse(JSON.stringify(datosCeldasPersonalizadas)) };
+            historialArchivoSemanas.push(registroHistorico);
+            localStorage.setItem('nogales_archivo_historico', JSON.stringify(historialArchivoSemanas));
+            alert(`💾 Semana archivada con éxito en el historial del año ${anioActivoRegistro}.`);
+        }
     }
 
     function cambiarSituacionFila(selectEl, nombre) {
-        if (emergenciaActivaGlobal) return; 
+        if (!modoAdministradorActivo) return;
         let val = selectEl.value;
         if (val !== "Activo") {
             funcionarioSeleccionadoAusencia = nombre;
@@ -1093,8 +1193,8 @@
         }
     }
 
-    function cerrarModalCalendario() { document.getElementById("modalCalendarioAusencia").style.display = "none"; }
-    function guardarAusenciaCalendario() {
+    function cerrarModalCalendario() { document.getElementById("modalCalendarioAusencia").style.display = "none"; construirTablaPrincipal(); }
+    function guardarAusencia() {
         let fInicio = document.getElementById("input-fecha-base").value;
         let fFin = document.getElementById("input-fecha-base").value;
         registrosAusencias[funcionarioSeleccionadoAusencia] = { 
@@ -1109,12 +1209,16 @@
     }
 
     function activarOVerificarEmergencia() {
+        if (!modoAdministradorActivo) {
+            alert("🔒 Debes activar el 'Modo Admin' con la contraseña para accionar el SOS.");
+            return;
+        }
         if (!emergenciaActivaGlobal) {
             emergenciaActivaGlobal = true;
             document.getElementById("btn-sos-accion").style.background = "#059669";
             document.getElementById("btn-sos-accion").innerText = "🛑 Desactivar SOS";
             aplicarEstadoEmergenciaVisual();
-            alert("🚨 ¡EMERGENCIA MUNICIPAL ACTIVADA! Todos los recursos se encuentran bloqueados y en alerta roja.");
+            alert("🚨 ¡EMERGENCIA MUNICIPAL ACTIVADA!");
         } else {
             emergenciaActivaGlobal = false;
             document.getElementById("btn-sos-accion").style.background = "#dc2626";
@@ -1125,11 +1229,8 @@
 
     function aplicarEstadoEmergenciaVisual() {
         let tabla = document.getElementById("tabla-principal");
-        if (emergenciaActivaGlobal) {
-            tabla.classList.add("emergencia-rojo-total");
-        } else {
-            tabla.classList.remove("emergencia-rojo-total");
-        }
+        if (emergenciaActivaGlobal) tabla.classList.add("emergencia-rojo-total");
+        else tabla.classList.remove("emergencia-rojo-total");
     }
 
     function abrirModalEmergenciaCalendario() {
@@ -1155,28 +1256,21 @@
         });
         localStorage.setItem('nogales_emergencias_dias', JSON.stringify(diasEmergenciaRegistrados));
         cerrarModalEmergencia();
-        alert("✅ Emergencia finalizada y registrada correctamente en el historial.");
     }
 
     function calcularDiasHabiles(fechaIsoStr) {
         if (!fechaIsoStr || fechaIsoStr === "2026-12-31") return 999;
         let fRt = new Date(fechaIsoStr + "T00:00:00");
-        let hoy = new Date(2026, 8, 1);
+        let hoy = new Date(2026, 8, 3);
         return Math.ceil((fRt - hoy) / (1000 * 60 * 60 * 24));
     }
 
     function llamar(num) { window.location.href = `tel:${num}`; }
     function copiarTablaNotepad() { alert("Planilla copiada para Excel."); }
     function enviarReporteEjecutivoWhatsApp() { alert("Reporte Ejecutivo generado."); }
-    function alternarModoLectura() { modoSoloLectura = !modoSoloLectura; alert("Modo alterado."); }
 
-    window.addEventListener('resize', () => {
-        construirTablaPrincipal();
-    });
-
-    setInterval(() => {
-        construirTablaPrincipal();
-    }, 30000);
+    window.addEventListener('resize', () => { construirTablaPrincipal(); });
+    setInterval(() => { construirTablaPrincipal(); }, 30000);
 
     window.onload = function() {
         document.getElementById("input-fecha-base").value = "2026-08-31";
