@@ -72,35 +72,33 @@ HTML
         .container { overflow-x: auto; max-width: 100vw; border: 1px solid #000; margin-bottom: 15px; background: #fff; -webkit-overflow-scrolling: touch; }
         
         table { width: 100%; border-collapse: collapse; font-size: 10px; table-layout: fixed; }
-        th, td { border: 1px solid #000000; padding: 3px 2px; text-align: center; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        th, td { border: 1px solid #000000; padding: 3px 2px; text-align: center; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; height: 26px; }
         th { background: #1e3a8a; color: #ffffff; font-weight: bold; position: sticky; top: 0; z-index: 10; font-size: 10px; }
         
         @media (max-width: 768px) {
             th.col-nombre, td.col-nombre {
                 position: sticky;
-                left: 30px;
+                left: 0px;
                 z-index: 5;
                 background-color: #f1f5f9;
             }
-            th.col-num, td.col-num {
+            th.col-tel, td.col-tel {
                 position: sticky;
-                left: 0px;
+                left: 105px;
                 z-index: 5;
                 background-color: #f1f5f9;
             }
         }
 
-        th.col-num, td.col-num { width: 30px; min-width: 30px; }
-        th.col-nombre, td.col-nombre { width: 140px; min-width: 140px; text-align: left; padding-left: 4px; }
-        th.col-tel, td.col-tel { width: 38px; min-width: 38px; }
+        th.col-nombre, td.col-nombre { width: 105px; min-width: 105px; text-align: left; padding-left: 4px; }
+        th.col-tel, td.col-tel { width: 50px; min-width: 50px; }
         th.col-sit, td.col-sit { width: 45px; min-width: 45px; }
         th.col-jornada, td.col-jornada { width: 130px; min-width: 130px; }
         th.col-ppu, td.col-ppu { width: 65px; min-width: 65px; }
 
         @media (max-width: 768px) {
-            th.col-num, td.col-num { width: 22px; min-width: 22px; }
-            th.col-nombre, td.col-nombre { width: 95px; min-width: 95px; }
-            th.col-tel, td.col-tel { width: 28px; min-width: 28px; }
+            th.col-nombre, td.col-nombre { width: 105px; min-width: 105px; }
+            th.col-tel, td.col-tel { width: 50px; min-width: 50px; }
             th.col-sit, td.col-sit { display: none !important; }
             th.col-jornada, td.col-jornada { width: 130px; min-width: 130px; }
             th.col-ppu, td.col-ppu { width: 55px; min-width: 55px; }
@@ -110,21 +108,22 @@ HTML
         .dia-color-1 { background-color: #ffffff !important; color: #000000 !important; font-weight: bold !important; }
         .dia-color-2 { background-color: #e0f2fe !important; color: #000000 !important; font-weight: bold !important; }
 
-        .celda-clikeable { cursor: pointer; font-weight: bold; text-align: center; padding: 2px; min-height: 20px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-radius: 3px; font-size: 9.5px; }
+        .celda-clikeable { cursor: pointer; font-weight: bold; text-align: center; height: 100%; width: 100%; display: flex; align-items: center; justify-content: center; font-size: 9px; padding: 0 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .celda-con-labor { background-color: #93c5fd !important; color: #1e3a8a !important; border: 2px solid #1d4ed8 !important; font-weight: 900 !important; }
         .celda-disponible { background-color: #6ee7b7 !important; color: #064e3b !important; border: 2px solid #047857 !important; font-weight: 900 !important; }
+        .celda-fuera-servicio { background-color: #cbd5e1 !important; color: #475569 !important; border: 2px solid #64748b !important; font-weight: 900 !important; cursor: not-allowed !important; }
 
         .emergencia-rojo-total { background-color: #dc2626 !important; color: #ffffff !important; }
         .emergencia-rojo-total * { background-color: #dc2626 !important; color: #ffffff !important; border-color: #f87171 !important; }
 
         .leyenda-colores {
-            display: flex; gap: 12px; justify-content: center; align-items: center; margin-bottom: 6px; font-size: 10px; font-weight: bold; background: #ffffff; padding: 6px; border: 2px solid #2563eb; border-radius: 4px; flex-wrap: wrap;
+            display: flex; gap: 12px; justify-content: center; align-items: center; margin-bottom: 6px; font-size: 10px; font-weight: bold; background: #ffffff; padding: 6px; border: 2.5px solid #2563eb; border-radius: 4px; flex-wrap: wrap;
         }
         .leyendaitem { display: flex; align-items: center; gap: 4px; }
         .cuadro-muestra { width: 16px; height: 16px; border: 2px solid #000; border-radius: 3px; }
 
         .dia-ausente-negro {
-            background-color: #000000 !important; color: #ffffff !important; font-weight: bold !important; cursor: not-allowed !important; font-size: 9.5px; text-align: center;
+            background-color: #000000 !important; color: #ffffff !important; font-weight: bold !important; cursor: not-allowed !important; font-size: 9.5px; text-align: center; height: 100%; display: flex; align-items: center; justify-content: center;
         }
 
         input[type="text"] { width: 100%; border: none; background: transparent; font-size: 10px; text-align: center; font-family: Arial, sans-serif; color: #000000; font-weight: bold; }
@@ -135,7 +134,8 @@ HTML
         .status-feriado { background-color: #fef3c7; color: #92400e; }
         .status-licencia { background-color: #e0e7ff; color: #3730a3; }
         
-        .phone-btn { background: none; border: none; cursor: pointer; font-size: 12px; padding: 0; }
+        .phone-link { font-weight: bold; color: #2563eb; text-decoration: none; display: inline-block; padding: 2px 4px; background: #e0f2fe; border-radius: 3px; border: 1px solid #93c5fd; font-size: 10px; }
+        .phone-link:hover { background: #bae6fd; }
         
         .modal { display: none; position: fixed; z-index: 200; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(2px); }
         .modal-horario-content, .modal-calendario-content, .modal-historico-content { background-color: #fff; margin: 3% auto; padding: 15px; border: 1px solid #888; width: 98%; max-width: 600px; border-radius: 6px; }
@@ -220,7 +220,7 @@ HTML
 
 <div id="panel-desplegable-vehiculos">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <h3 style="margin: 0; font-size: 12px; color: #1e3a8a;">🚗 PANEL DE CONTROL DE FLOTA MUNICIPAL (27 Vehículos — Revisiones Técnicas, Km & Combustible)</h3>
+        <h3 style="margin: 0; font-size: 12px; color: #1e3a8a;">🚗 PANEL DE CONTROL DE FLOTA MUNICIPAL (28 Vehículos — Revisiones Técnicas, Km & Combustible)</h3>
         <div>
             <label style="font-weight:bold; font-size:10px;">Año:</label>
             <select id="select-anio-vehiculos" onchange="cambiarAnioVehiculos(this.value)" style="padding:2px; font-weight:bold;">
@@ -237,8 +237,9 @@ HTML
 
 <div class="leyenda-colores">
     <span>💡 <b>GUÍA DE COLORES Y ESTADOS OPERATIVOS:</b></span>
-    <div class="leyendaitem"><div class="cuadro-muestra" style="background:#6ee7b7; border-color:#047857;"></div><span><b>DISPONIBLE (PPU Bloqueada en --)</b></span></div>
+    <div class="leyendaitem"><div class="cuadro-muestra" style="background:#6ee7b7; border-color:#047857;"></div><span><b>DISPONIBLE (PPU Limpia en -- / Columna PPU sin labor opcional)</b></span></div>
     <div class="leyendaitem"><div class="cuadro-muestra" style="background:#93c5fd; border-color:#1d4ed8;"></div><span><b>CON LABOR (PPU Habilitada / Reemplazo automático)</b></span></div>
+    <div class="leyendaitem"><div class="cuadro-muestra" style="background:#cbd5e1; border-color:#64748b;"></div><span><b>FUERA DE SERVICIO (Jornada finalizada / Alfonso Vera PM)</b></span></div>
     <div class="leyendaitem"><div class="cuadro-muestra" style="background:#000000; border-color:#ffffff;"></div><span><b>AUSENCIA (Suplencia activada)</b></span></div>
 </div>
 
@@ -351,7 +352,6 @@ HTML
     let modoAdministradorActivo = false;
     let emergenciaActivaGlobal = false;
     let diasEmergenciaRegistrados = JSON.parse(localStorage.getItem('nogales_emergencias_dias') || '[]');
-    let diaAmpliadoMovilIndex = null;
     
     const CLAVE_ADMIN = "nogales1891";
 
@@ -423,6 +423,7 @@ HTML
         { ppu: "RK.YD-61", rtStr: "abril/2027", rtIso: "2027-04-15", tipo: "Camioneta Nissan Navara", motor: "YS23B266CO541623", chasis: "N6BD33A6NK809776", unidad: "Unidad de Movilización", kmIni: "75181", meses: { Ene: "99547", Feb: "20487", Mar: "40480", Abr: "0", May: "52947", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
         { ppu: "TS.LD-69", rtStr: "enero/2027", rtIso: "2027-01-15", tipo: "Furgón Hiunday Staria", motor: "D4HBRJ013776", chasis: "KMHYE811DSU195110", unidad: "Unidad de Movilización", kmIni: "15154", meses: { Ene: "0", Feb: "0", Mar: "97087", Abr: "168658", May: "207853", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
         { ppu: "VR.VR-83", rtStr: "PENDIENTE", rtIso: "2026-12-31", tipo: "Bus Mercedez Benz Sprinter", motor: "654920W01940188", chasis: "AC907645TE273549", unidad: "Unidad de Movilización", kmIni: "1265", meses: { Ene: "0", Feb: "0", Mar: "0", Abr: "0", May: "0", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
+        { ppu: "VR.XW-64", rtStr: "PENDIENTE", rtIso: "2026-12-31", tipo: "Vehículo Municipal Adicional", motor: "VRXW64-MOT", chasis: "VRXW64-CHS", unidad: "Unidad de Movilización", kmIni: "1000", meses: { Ene: "0", Feb: "0", Mar: "0", Abr: "0", May: "0", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
         { ppu: "VD.DF-13", rtStr: "junio/2027", rtIso: "2027-06-15", tipo: "Camioneta Foton G7 MT 4x4 DC", motor: "R068940", chasis: "LVAV2MAB2RUO48085", unidad: "Seguridad Pública", kmIni: "8752", meses: { Ene: "212144", Feb: "165940", Mar: "105267", Abr: "110505", May: "87111", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
         { ppu: "VD.DF-14", rtStr: "julio/2027", rtIso: "2027-07-15", tipo: "Camioneta Foton G7 MT 4x4 DC", motor: "R058508", chasis: "LVAV2MAB4RU07729", unidad: "Seguridad Pública", kmIni: "8815", meses: { Ene: "111013", Feb: "113367", Mar: "1909956", Abr: "313265", May: "501366", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
         { ppu: "VZ.WP-26", rtStr: "diciembre/2027", rtIso: "2027-12-15", tipo: "Camioneta Municipal Asignada", motor: "VZ2600", chasis: "CHASISVZ26", unidad: "Secplac / DOM / Bienestar", kmIni: "12000", meses: { Ene: "0", Feb: "0", Mar: "0", Abr: "0", May: "0", Jun: "", Jul: "", Ago: "", Sep: "", Oct: "", Nov: "", Dic: "" } },
@@ -447,33 +448,33 @@ HTML
     const mesesAnio = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 
     const funcionariosLista = [
-        { nombre: "Marcelo Chacana", tel: "56992203114", ppuDef: "--", esConductor: true, tipoFila: "personal" },
-        { nombre: "Carolina Suazo", tel: "56974430795", ppuDef: "--", esConductor: false, tipoFila: "personal" },
-        { nombre: "Fabiola Bernales", tel: "56954048360", ppuDef: "--", esConductor: false, tipoFila: "personal" },
-        { nombre: "Orlando Tapia", tel: "56996234126", ppuDef: "KC-PH-82", esConductor: true, tipoFila: "personal" },
-        { nombre: "Gerardo Figueroa", tel: "56942031295", ppuDef: "GK-PP-13", esConductor: true, tipoFila: "personal" },
-        { nombre: "Alfonso Vera", tel: "56989964196", ppuDef: "HZ-XP-31", esConductor: true, tipoFila: "personal" },
-        { nombre: "Miguel Manzur", tel: "56975704357", ppuDef: "TD-LC-47", esConductor: true, tipoFila: "personal" },
-        { nombre: "Jeremias Tapia", tel: "56950663481", ppuDef: "CG-PZ-83", esConductor: true, tipoFila: "personal" },
-        { nombre: "Eduardo Bernal", tel: "56961368636", ppuDef: "VW.LX-75", esConductor: true, tipoFila: "personal" }, 
-        { nombre: "Freddy Suárez", tel: "56976000179", ppuDef: "FP-KD-11", esConductor: true, tipoFila: "personal" }, 
-        { nombre: "Sergio Saavedra", tel: "56994432551", ppuDef: "HL-GZ-78", esConductor: true, tipoFila: "personal" },
-        { nombre: "Claudio Suarez", tel: "56966253807", ppuDef: "JW-YY-42", esConductor: true, tipoFila: "personal" }, 
-        { nombre: "Rodrigo Jara", tel: "56973954225", ppuDef: "KR-GS-72", esConductor: true, tipoFila: "personal" },
-        { nombre: "Susana Vásquez", tel: "56993081405", ppuDef: "TD-LC-47", esConductor: true, tipoFila: "personal" },
-        { nombre: "Patricio Osorio", tel: "56950707528", ppuDef: "LX.WP-96", esConductor: true, tipoFila: "personal" },
-        { nombre: "Hector Sepulveda", tel: "56966622905", ppuDef: "LX.WP-97", esConductor: true, tipoFila: "personal" },
-        { nombre: "Oscar Alvarado", tel: "56920055164", ppuDef: "LX.WP-98", esConductor: true, tipoFila: "personal" },
-        { nombre: "Enzo Nuñez", tel: "56956757268", ppuDef: "--", esConductor: true, tipoFila: "personal" },
-        { nombre: "Julio Vergara", tel: "56941443588", ppuDef: "--", esConductor: true, tipoFila: "personal" },
-        { nombre: "Mario Cisternas", tel: "56951554560", ppuDef: "--", esConductor: true, tipoFila: "personal" },
-        { nombre: "Felipe Osorio", tel: "56978963649", ppuDef: "--", esConductor: true, tipoFila: "personal" },
-        { nombre: "Matias Fuentes", tel: "56936581786", ppuDef: "--", esConductor: true, tipoFila: "personal" },
-        { nombre: "Alcaldia", tel: "56985851000", ppuDef: "VY.ST-78", esConductor: true, tipoFila: "alcaldia" },
-        { nombre: "Secplac/DOM/Bien.", tel: ["56965205316", "56987445148", "56956435614"], labelTel: ["DOM: 56965205316", "Secplac: 56987445148", "Bienestar: 56956435614"], ppuDef: "VZ.WP-26", esConductor: true, tipoFila: "secplac" },
-        { nombre: "Seguridad Pública (1)", tel: "56997783436", ppuDef: "VD.DF-13", esConductor: true, tipoFila: "seguridad1" },
-        { nombre: "Seguridad Pública (2)", tel: "56997783436", ppuDef: "VD.DF-14", esConductor: true, tipoFila: "seguridad2" },
-        { nombre: "Gestión de Riesgos", tel: "56974850933", ppuDef: "KR-GS-74", esConductor: true, tipoFila: "riesgos" }
+        { nombre: "Marcelo Chacana", corto: "M. Chacana", tel: "56992203114", ppuDef: "--", esConductor: true, tipoFila: "personal" },
+        { nombre: "Carolina Suazo", corto: "C. Suazo", tel: "56974430795", ppuDef: "--", esConductor: false, tipoFila: "personal" },
+        { nombre: "Fabiola Bernales", corto: "F. Bernales", tel: "56954048360", ppuDef: "--", esConductor: false, tipoFila: "personal" },
+        { nombre: "Orlando Tapia", corto: "O. Tapia", tel: "56996234126", ppuDef: "KC-PH-82", esConductor: true, tipoFila: "personal" },
+        { nombre: "Gerardo Figueroa", corto: "G. Figueroa", tel: "56942031295", ppuDef: "GK-PP-13", esConductor: true, tipoFila: "personal" },
+        { nombre: "Alfonso Vera", corto: "A. Vera", tel: "56989964196", ppuDef: "HZ-XP-31", esConductor: true, tipoFila: "personal" },
+        { nombre: "Miguel Manzur", corto: "M. Manzur", tel: "56975704357", ppuDef: "TD-LC-47", esConductor: true, tipoFila: "personal" },
+        { nombre: "Jeremias Tapia", corto: "J. Tapia", tel: "56950663481", ppuDef: "CG-PZ-83", esConductor: true, tipoFila: "personal" },
+        { nombre: "Eduardo Bernal", corto: "E. Bernal", tel: "56961368636", ppuDef: "VW.LX-75", esConductor: true, tipoFila: "personal" }, 
+        { nombre: "Freddy Suárez", corto: "F. Suárez", tel: "56976000179", ppuDef: "FP-KD-11", esConductor: true, tipoFila: "personal" }, 
+        { nombre: "Sergio Saavedra", corto: "S. Saavedra", tel: "56994432551", ppuDef: "HL-GZ-78", esConductor: true, tipoFila: "personal" },
+        { nombre: "Claudio Suarez", corto: "C. Suarez", tel: "56966253807", ppuDef: "JW-YY-42", esConductor: true, tipoFila: "personal" }, 
+        { nombre: "Rodrigo Jara", corto: "R. Jara", tel: "56973954225", ppuDef: "KR-GS-72", esConductor: true, tipoFila: "personal" },
+        { nombre: "Susana Vásquez", corto: "S. Vásquez", tel: "56993081405", ppuDef: "TD-LC-47", esConductor: true, tipoFila: "personal" },
+        { nombre: "Patricio Osorio", corto: "P. Osorio", tel: "56950707528", ppuDef: "LX.WP-96", esConductor: true, tipoFila: "personal" },
+        { nombre: "Hector Sepulveda", corto: "H. Sepulveda", tel: "56966622905", ppuDef: "LX.WP-97", esConductor: true, tipoFila: "personal" },
+        { nombre: "Oscar Alvarado", corto: "O. Alvarado", tel: "56920055164", ppuDef: "LX.WP-98", esConductor: true, tipoFila: "personal" },
+        { nombre: "Enzo Nuñez", corto: "E. Nuñez", tel: "56956757268", ppuDef: "VR.XW-64", esConductor: true, tipoFila: "personal" },
+        { nombre: "Julio Vergara", corto: "J. Vergara", tel: "56941443588", ppuDef: "--", esConductor: true, tipoFila: "personal" },
+        { nombre: "Mario Cisternas", corto: "M. Cisternas", tel: "56951554560", ppuDef: "--", esConductor: true, tipoFila: "personal" },
+        { nombre: "Felipe Osorio", corto: "F. Osorio", tel: "56978963649", ppuDef: "--", esConductor: true, tipoFila: "personal" },
+        { nombre: "Matias Fuentes", corto: "M. Fuentes", tel: "56936581786", ppuDef: "--", esConductor: true, tipoFila: "personal" },
+        { nombre: "Alcaldia", corto: "Alcaldía", tel: "56985851000", ppuDef: "VY.ST-78", esConductor: true, tipoFila: "alcaldia" },
+        { nombre: "Secplac/DOM/Bien.", corto: "Secplac/DOM", tel: ["56965205316", "56987445148", "56956435614"], labelTel: ["DOM: 56965205316", "Secplac: 56987445148", "Bienestar: 56956435614"], ppuDef: "VZ.WP-26", esConductor: true, tipoFila: "secplac" },
+        { nombre: "Seguridad Pública (1)", corto: "S. Pública 1", tel: "56997783436", ppuDef: "VD.DF-13", esConductor: true, tipoFila: "seguridad1" },
+        { nombre: "Seguridad Pública (2)", corto: "S. Pública 2", tel: "56997783436", ppuDef: "VD.DF-14", esConductor: true, tipoFila: "seguridad2" },
+        { nombre: "Gestión de Riesgos", corto: "G. Riesgos", tel: "56974850933", ppuDef: "KR-GS-74", esConductor: true, tipoFila: "riesgos" }
     ];
 
     function obtenerFechasCalculadas() {
@@ -495,23 +496,25 @@ HTML
 
     function obtenerIndicesDiasAutomatico() {
         let esMovil = window.innerWidth <= 768;
+        let ahora = new Date();
+        let baseVal = document.getElementById("input-fecha-base").value;
+        let dBase = baseVal ? new Date(baseVal + "T00:00:00") : new Date("2026-08-31T00:00:00");
+        if (semanaActiva === 2) dBase.setDate(dBase.getDate() + 7);
+        
+        let diffTime = ahora - dBase;
+        let diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        if (diffDays < 0 || diffDays > 6) diffDays = 0;
+
         if (!esMovil) { return [0, 1, 2, 3, 4, 5, 6]; }
 
         let esHorizontal = window.innerWidth > window.innerHeight;
         if (esHorizontal) {
-            if (diaAmpliadoMovilIndex !== null) return [diaAmpliadoMovilIndex];
-            return [0, 1, 2];
+            let idx1 = diffDays;
+            let idx2 = (diffDays + 1 < 7) ? diffDays + 1 : diffDays;
+            let idx3 = (diffDays + 2 < 7) ? diffDays + 2 : idx2;
+            return [idx1, idx2, idx3];
         } else {
-            let indiceHoy = 0;
-            let ahora = new Date();
-            let baseVal = document.getElementById("input-fecha-base").value;
-            let dBase = baseVal ? new Date(baseVal + "T00:00:00") : new Date("2026-08-31T00:00:00");
-            if (semanaActiva === 2) dBase.setDate(dBase.getDate() + 7);
-            
-            let diffTime = ahora - dBase;
-            let diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            if (diffDays >= 0 && diffDays < 7) indiceHoy = diffDays;
-            return [indiceHoy];
+            return [diffDays];
         }
     }
 
@@ -523,20 +526,15 @@ HTML
         if (!esMovil) {
             document.getElementById("titulo-semana-activa").innerText = `PROGRAMACIÓN OPERATIVA — ${etiquetaSemana.toUpperCase()} (Planilla Madre 7 Días: Del ${fechas[0].textoCorto} al ${fechas[6].textoCorto})`;
         } else {
-            let indices = obtenerIndicesDiasAutomatico();
             let esHorizontal = window.innerWidth > window.innerHeight;
-            if (esHorizontal && diaAmpliadoMovilIndex !== null) {
-                document.getElementById("titulo-semana-activa").innerText = `VISITA AMPLIADA: ${fechas[diaAmpliadoMovilIndex].nombreDia} (${fechas[diaAmpliadoMovilIndex].textoCorto}) — [Doble Clic para Volver a 3 Días]`;
-            } else {
-                let modoStr = esHorizontal ? "Bloque 3 Días (Horizontal)" : `Día Único: ${fechas[indices[0]].nombreDia} (Deslizable)`;
-                document.getElementById("titulo-semana-activa").innerText = `PROGRAMACIÓN OPERATIVA — ${modoStr.toUpperCase()}`;
-            }
+            let indices = obtenerIndicesDiasAutomatico();
+            let modoStr = esHorizontal ? `Bloque 3 Días (${fechas[indices[0]].nombreDia} al ${fechas[indices[indices.length-1]].nombreDia})` : `Día Actual: ${fechas[indices[0]].nombreDia} (${fechas[indices[0]].textoCorto}) — Desliza horizontalmente`;
+            document.getElementById("titulo-semana-activa").innerText = `PROGRAMACIÓN OPERATIVA — ${modoStr.toUpperCase()}`;
         }
     }
 
     function cambiarSemanaActiva(num) {
         semanaActiva = num;
-        diaAmpliadoMovilIndex = null;
         document.getElementById("btn-semana-1").className = semanaActiva === 1 ? "tab-btn active" : "tab-btn";
         document.getElementById("btn-semana-2").className = semanaActiva === 2 ? "tab-btn active" : "tab-btn";
         actualizarFechasSemanas();
@@ -551,10 +549,19 @@ HTML
             if (nombre === "Jeremias Tapia") return { b1: "08:00 a 14:00 - Trabajo en terreno", b2: "15:00 a 19:00 - Trabajo en terreno", b3: "", disponible: "", archivo: "" };
             if (nombre === "Sergio Saavedra") return { b1: "08:00 a 14:00 - Trabajo en terreno", b2: "15:00 a 19:00 - Trabajo en terreno", b3: "", disponible: "", archivo: "" };
 
+            // Propagación garantizada para Gerardo Figueroa de lunes a viernes (mañana y tarde)
             if (nombre === "Gerardo Figueroa") return { b1: "06:30 a 09:30 Ruta", b2: "09:30 a 14:00 Disponible", b3: "", disponible: "15:00 a 18:30 en ruta", archivo: "" };
+            
+            // Propagación garantizada para Orlando Tapia de lunes a viernes (mañana y tarde)
             if (nombre === "Orlando Tapia") return { b1: "07:00 a 09:30 Ruta", b2: "09:30 a 11:30 Disponible", b3: "", disponible: "", archivo: "" };
 
-            if ((nombre === "Freddy Suárez" || nombre === "Eduardo Bernal") && (nombreDiaStr === "Miércoles" || nombreDiaStr === "Jueves")) {
+            // Propagación garantizada para Miguel Manzur y Óscar Alvarado de lunes a viernes (mañana y tarde)
+            if (nombre === "Miguel Manzur" || nombre === "Oscar Alvarado") return { b1: "08:00 a 14:00 - Apoyo Terreno", b2: "15:00 a 19:00 - Apoyo Terreno", b3: "", disponible: "", archivo: "" };
+
+            // Propagación garantizada para Matías Fuentes y Enzo Nuñez de lunes a viernes (mañana y tarde)
+            if (nombre === "Matias Fuentes" || nombre === "Enzo Nuñez") return { b1: "08:00 a 14:00 - Apoyo Operativo Terreno", b2: "15:00 a 19:00 - Apoyo Operativo Terreno", b3: "", disponible: "", archivo: "" };
+
+            if ((nombre === "Freddy Suárez" || nombre === "Eduardo Bernal" || nombre === "Julio Vergara" || nombre === "Felipe Osorio") && (nombreDiaStr === "Miércoles" || nombreDiaStr === "Jueves")) {
                 return { b1: "08:00 a 14:00 - Entrega de Agua Potable", b2: "15:00 a 18:30 - Entrega de Agua Potable", b3: "", disponible: "", archivo: "" };
             }
 
@@ -566,11 +573,12 @@ HTML
                 return { b1: "08:00 a 14:00 - Traslado de Unidad de Veterinaria", b2: "", b3: "", disponible: "", archivo: "" };
             }
 
+            // REGLA ESTRICTA ALFONSO VERA: Finaliza a las 14:00. Su turno de tarde se marca fuera de servicio automáticamente.
             if (nombre === "Alfonso Vera") return { b1: "05:00 a 11:30 - Traslado de Estudiantes", b2: "", b3: "", disponible: "🟢 DISPONIBLE (11:30 a 14:00)", archivo: "" };
-            if (nombre === "Miguel Manzur") return { b1: "08:00 a 14:00 - Apoyo Terreno", b2: "", b3: "", disponible: "", archivo: "" };
+
+            if (nombre === "Julio Vergara" || nombre === "Felipe Osorio" || nombre === "Mario Cisternas") return { b1: "08:00 a 14:00 - Apoyo Operativo Terreno", b2: "15:00 a 19:00 - Apoyo Operativo Terreno", b3: "", disponible: "", archivo: "" };
         }
 
-        // Filas permanentes: se liberan sábado y domingo (diaSemanaIndex >= 5) para no asignar tareas automáticas
         if (tipoFila === "alcaldia") {
             if (diaSemanaIndex < 5) return { b1: "Funciones propias del cargo", b2: "", b3: "", disponible: "", archivo: "" };
             return { b1: "", b2: "", b3: "", disponible: "", archivo: "" };
@@ -609,10 +617,14 @@ HTML
         return false;
     }
 
-    function renderizarCeldaManual(b1, b2, b3, disponible, archivo, tipoJornada, esSabDom, tipoFila, regManOp) {
+    function renderizarCeldaManual(nombre, b1, b2, b3, disponible, archivo, tipoJornada, esSabDom, tipoFila, regManOp) {
+        // Regla estricta para Alfonso Vera en jornada de tarde: fuera de servicio obligatoria
+        if (nombre === "Alfonso Vera" && tipoJornada === 'tarde' && !esSabDom) {
+            return { texto: "FUERA DE SERVICIO", claseCss: "celda-fuera-servicio", tieneLabor: false };
+        }
+
         let tareas = [b1, b2, b3].filter(t => t && t.trim() !== "");
         let tieneDisp = disponible && disponible.trim() !== "";
-        let tieneArchivo = archivo && archivo.trim() !== "";
 
         if (tipoJornada === 'tarde' && regManOp) {
             let tareasManana = [regManOp.b1, regManOp.b2, regManOp.b3].filter(t => t && t.trim() !== "");
@@ -624,16 +636,14 @@ HTML
                     while ((match = regexTime.exec(t)) !== null) {
                         let partesFin = match[2].split(':');
                         let minFin = parseInt(partesFin[0]) * 60 + parseInt(partesFin[1]);
-                        if (minFin > 840) { // 840 minutos = 14:00 horas
-                            cruzaTarde = true;
-                        }
+                        if (minFin > 840) { cruzaTarde = true; }
                     }
                 });
 
                 if (cruzaTarde) {
-                    return { htmlRender: "Jornada continua / Asignado", claseCss: "celda-con-labor", tieneLabor: true };
+                    return { texto: "Asignado", claseCss: "celda-con-labor", tieneLabor: true };
                 } else {
-                    return { htmlRender: "🟢 DISPONIBLE (15:00-19:30)", claseCss: "celda-disponible", tieneLabor: false };
+                    return { texto: "🟢 DISP.", claseCss: "celda-disponible", tieneLabor: false };
                 }
             }
         }
@@ -644,20 +654,14 @@ HTML
         if (tareas.length === 0 && !tieneDisp) {
             const filasPermanentes = ["alcaldia", "secplac", "seguridad1", "seguridad2", "riesgos"];
             if (filasPermanentes.includes(tipoFila) && !esSabDom) {
-                return { htmlRender: "Funciones asignadas", claseCss: "celda-con-labor", tieneLabor: true };
+                return { texto: "Asignado", claseCss: "celda-con-labor", tieneLabor: true };
             }
-
-            let def = esSabDom ? "🟢 DISPONIBLE (Sábado/Domingo)" : (tipoJornada === 'manana' ? "🟢 DISPONIBLE (08:00-14:00)" : "🟢 DISPONIBLE (15:00-19:30)");
-            return { htmlRender: def, claseCss: "celda-disponible", tieneLabor: false };
+            return { texto: "🟢 DISP.", claseCss: "celda-disponible", tieneLabor: false };
         }
 
-        let html = "";
-        tareas.forEach(t => { html += `<div>${t}</div>`; });
-        if (tieneDisp) html += `<div style="color:#047857; font-weight:900;">${disponible}</div>`;
-        if (tieneArchivo) html += `<div style="font-size:9px; color:#1e3a8a;">📎 ${archivo}</div>`;
-
+        let textoMostrar = tareas.length > 0 ? tareas[0] : (tieneDisp ? disponible : "🟢 DISP.");
         let clase = tareas.length > 0 ? (esUrgente10Min ? "celda-con-labor alerta-10min-termino" : "celda-con-labor") : "celda-disponible";
-        return { htmlRender: html, claseCss: clase, tieneLabor: tareas.length > 0 };
+        return { texto: textoMostrar, claseCss: clase, tieneLabor: tareas.length > 0 };
     }
 
     function calcularDisponibilidadAuto() {
@@ -710,18 +714,17 @@ HTML
     }
 
     function generarSelectPpuInteligente(nombre, tipoFila, esConductor, ppuDefecto, keyMan, keyTar, keySd, d) {
-        const personalBloqueadoPpu = ["Marcelo Chacana", "Carolina Suazo", "Fabiola Bernales", "Enzo Nuñez", "Julio Vergara", "Mario Cisternas", "Felipe Osorio", "Matias Fuentes"];
+        const personalBloqueadoPpu = ["Carolina Suazo", "Fabiola Bernales", "Mario Cisternas"];
         const filasPermanentesPpu = ["alcaldia", "secplac", "seguridad1", "seguridad2", "riesgos"];
 
         let disableAttr = modoAdministradorActivo ? "" : "disabled";
-        let estiloExtra = modoAdministradorActivo ? "background:#e0f2fe; font-weight:bold;" : "background:#f1f5f9; color:#94a3b8; cursor:not-allowed;";
+        let estiloExtra = modoAdministradorActivo ? "background:#e0f2fe; font-weight:bold;" : "background:#f1f5f9; color:#000000; font-weight:bold; cursor:pointer;";
 
-        // En filas permanentes, si es fin de semana (d >= 5), se permite manipular el select libremente en Modo Admin
         if (filasPermanentesPpu.includes(tipoFila) && d < 5) {
             return `<select ${disableAttr} style="${estiloExtra}"><option value="${ppuDefecto}">${ppuDefecto}</option></select>`;
         }
 
-        if (!esConductor || personalBloqueadoPpu.includes(nombre)) {
+        if (!esConductor || (personalBloqueadoPpu.includes(nombre) && nombre !== "Marcelo Chacana")) {
             return `<select disabled style="background:#f1f5f9; color:#94a3b8; cursor:not-allowed;"><option value="--">--</option></select>`;
         }
 
@@ -740,29 +743,10 @@ HTML
         let keyPpu = `ppu_${keyMan}`;
         let ppuActual = datosPpuPersonalizadas[keyPpu] || (activoConLabor ? ppuDefecto : "--");
 
-        const filasInstitucionalesFijas = ["Alcaldia", "Secplac/DOM/Bien.", "Seguridad Pública (1)", "Seguridad Pública (2)", "Gestión de Riesgos"];
-        if ((filasInstitucionalesFijas.includes(nombre) && d < 5) || ppuDefecto !== "--") {
-            let ppuFijaVal = ppuDefecto;
-            let opcionesFijas = `<option value="${ppuFijaVal}" selected>${ppuFijaVal}</option>`;
-            vehiculosMunicipales.forEach(v => {
-                if (v.ppu !== ppuFijaVal) {
-                    opcionesFijas += `<option value="${v.ppu}">${v.ppu}</option>`;
-                }
-            });
-            return `<select ${disableAttr} onchange="guardarPpuCelda(this, '${keyPpu}')" ondblclick="mostrarDetallePpu(this.value)" style="${estiloExtra}">${opcionesFijas}</select>`;
-        }
-
-        if (!activoConLabor && !modoAdministradorActivo) {
-            return `<select disabled style="background:#f1f5f9; color:#94a3b8; cursor:not-allowed;" title="Bloqueado: Funcionario Disponible"><option value="--">--</option></select>`;
-        }
-
-        let patentesExcluidas = ["VY.ST-78", "VZ.WP-26", "VD.DF-13", "VD.DF-14", "KR-GS-74"];
-        let opciones = `<option value="--">--</option>`;
+        let opciones = `<option value="--" ${ppuActual === '--' ? 'selected' : ''}>--</option>`;
         vehiculosMunicipales.forEach(v => {
-            if (!patentesExcluidas.includes(v.ppu)) {
-                let sel = (v.ppu === ppuActual) ? "selected" : "";
-                opciones += `<option value="${v.ppu}" ${sel}>${v.ppu}</option>`;
-            }
+            let sel = (v.ppu === ppuActual) ? "selected" : "";
+            opciones += `<option value="${v.ppu}" ${sel}>${v.ppu}</option>`;
         });
         return `<select ${disableAttr} onchange="guardarPpuCelda(this, '${keyPpu}')" ondblclick="mostrarDetallePpu(this.value)" style="${estiloExtra}">${opciones}</select>`;
     }
@@ -797,7 +781,7 @@ HTML
         let diasARenderizar = obtenerIndicesDiasAutomatico();
         let esMovil = window.innerWidth <= 768;
 
-        let htmlHeadTh1 = `<tr><th rowspan="2" class="col-num">N°</th><th rowspan="2" class="col-nombre">Nombre</th><th rowspan="2" class="col-tel">Tel</th><th rowspan="2" class="col-sit" title="Situación">ST</th>`;
+        let htmlHeadTh1 = `<tr><th rowspan="2" class="col-nombre">Nombre</th><th rowspan="2" class="col-tel">Tel</th><th rowspan="2" class="col-sit" title="Situación">ST</th>`;
         let htmlHeadTh2 = `<tr>`;
 
         diasARenderizar.forEach((d, idx) => {
@@ -805,16 +789,15 @@ HTML
             let nombreDiaStr = fechasSemanales[d].nombreDia;
             let esSabDom = d >= 5;
             let estiloTh = esSabDom ? `background:#1e3a8a; color:#fff;` : ``;
-            let ondblclickTh = esSabDom ? `` : `ondblclick="ampliarDiaMovil(${d})" title="Doble clic para ampliar o restaurar vista en horizontal"`;
 
             if (!esSabDom) {
-                htmlHeadTh1 += `<th colspan="3" id="th-d${d}" class="${colorClase}" style="${estiloTh} cursor:pointer;" ${ondblclickTh}>${nombreDiaStr} (${fechasSemanales[d].textoCorto}) 🔍</th>`;
+                htmlHeadTh1 += `<th colspan="3" id="th-d${d}" class="${colorClase}" style="${estiloTh}">${nombreDiaStr} (${fechasSemanales[d].textoCorto})</th>`;
                 htmlHeadTh2 += `
                     <th class="col-jornada ${colorClase}" style="color:#000;">Mañana (08:00-14:00)</th>
                     <th class="col-jornada ${colorClase}" style="color:#000;">Tarde (15:00-19:30)</th>
                     <th class="col-ppu ${colorClase}" style="color:#000;">PPU</th>`;
             } else {
-                htmlHeadTh1 += `<th colspan="2" id="th-d${d}" class="${colorClase}" style="${estiloTh} cursor:pointer;" ${ondblclickTh}>${nombreDiaStr} (${fechasSemanales[d].textoCorto}) 🔍</th>`;
+                htmlHeadTh1 += `<th colspan="2" id="th-d${d}" class="${colorClase}" style="${estiloTh}">${nombreDiaStr} (${fechasSemanales[d].textoCorto})</th>`;
                 htmlHeadTh2 += `
                     <th class="col-jornada ${colorClase}" style="color:#000;">Turno / Horario (Máx 12h)</th>
                     <th class="col-ppu ${colorClase}" style="color:#000;">PPU</th>`;
@@ -825,8 +808,7 @@ HTML
         thead.innerHTML = htmlHeadTh1 + htmlHeadTh2;
 
         let htmlBody = "";
-        funcionariosLista.forEach((f, index) => {
-            let num = index + 1;
+        funcionariosLista.forEach((f) => {
             let tipoAusenciaActual = registrosAusencias[f.nombre] ? registrosAusencias[f.nombre].tipo : "ACTIVO";
             let letraSt = tipoAusenciaActual === "DIA ADMINISTRATIVO" ? "D" : (tipoAusenciaActual === "FERIADO LEGAL" ? "F" : (tipoAusenciaActual === "LICENCIA MEDICA" ? "L" : "A"));
             let claseEstado = tipoAusenciaActual === "DIA ADMINISTRATIVO" ? "status-admin" : (tipoAusenciaActual === "FERIADO LEGAL" ? "status-feriado" : (tipoAusenciaActual === "LICENCIA MEDICA" ? "status-licencia" : "status-activo"));
@@ -843,19 +825,19 @@ HTML
 
             let telHtml = "";
             if (Array.isArray(f.tel)) {
-                let opcionesTel = `<select style="background:#e0f2fe; font-weight:bold;"><option value="">📞 Teléfonos</option>`;
+                let opcionesTel = `<select style="background:#e0f2fe; font-weight:bold;" onchange="if(this.value) window.location.href='tel:'+this.value"><option value="">📞 Ver</option>`;
                 f.tel.forEach((tNum, tIdx) => { opcionesTel += `<option value="${tNum}">${f.labelTel[tIdx]}</option>`; });
                 opcionesTel += `</select>`;
                 telHtml = opcionesTel;
             } else {
-                telHtml = `<button class="phone-btn" onclick="llamar('${f.tel}')" title="Llamar">📞</button>`;
+                telHtml = `<a href="tel:${f.tel}" class="phone-link" title="Llamar">📞 Llamar</a>`;
             }
 
-            let estiloNombreExtra = f.tipoFila !== "personal" ? `background:#f1f5f9; text-align:left; font-weight:bold; color:#000000;` : `background:#f1f5f9; text-align:left; font-weight:bold;`;
+            let estiloNombreExtra = `background:#f1f5f9; text-align:left; font-weight:bold;`;
+            let nombreMostrar = f.corto;
 
             htmlBody += `<tr data-funcionario="${f.nombre}">
-                <td class="col-num">${num}</td>
-                <td class="col-nombre"><input type="text" value="${f.nombre}" readonly style="${estiloNombreExtra}"></td>
+                <td class="col-nombre"><input type="text" value="${nombreMostrar}" readonly style="${estiloNombreExtra}"></td>
                 <td class="col-tel">${telHtml}</td>
                 <td class="col-sit">${selectStHtml}</td>`;
 
@@ -871,12 +853,25 @@ HTML
                 let keySabDom = `${f.nombre}_s${semanaActiva}_d${d}_sd`;
 
                 let regMan = datosCeldasPersonalizadas[keyMan] || { b1: base.b1, b2: base.b2, b3: base.b3, disponible: base.disponible, archivo: base.archivo };
-                let regTar = datosCeldasPersonalizadas[keyTar] || { b1: "", b2: "", b3: "", disponible: "", archivo: "" };
+                let regTar = datosCeldasPersonalizadas[keyTar] || { b1: base.b1, b2: base.b2, b3: base.b3, disponible: base.disponible, archivo: base.archivo };
                 let regSD = datosCeldasPersonalizadas[keySabDom] || { b1: base.b1, b2: base.b2, b3: base.b3, disponible: base.disponible, archivo: base.archivo };
 
-                let onclickAttr = `onclick="abrirModalDetalle(this, '${keyMan}')"`;
-                let onclickTarAttr = `onclick="abrirModalDetalle(this, '${keyTar}')"`;
-                let onclickSdAttr = `onclick="abrirModalDetalle(this, '${keySabDom}')"`;
+                if (!datosCeldasPersonalizadas[keyMan] && d < 5) {
+                    regMan.b1 = base.b1; regMan.b2 = base.b2; regMan.b3 = base.b3; regMan.disponible = base.disponible;
+                }
+                if (!datosCeldasPersonalizadas[keyTar] && d < 5) {
+                    if (base.b2 && base.b2.includes("15:00")) {
+                        regTar.b1 = base.b2;
+                    } else if (f.nombre === "Alfonso Vera") {
+                        regTar.b1 = "";
+                    } else if (f.nombre === "Gerardo Figueroa" && base.disponible) {
+                        regTar.b1 = base.disponible;
+                    }
+                }
+
+                let onclickAttr = `onclick="abrirModalDetalle(this, '${keyMan}')" title="Clic para ver/editar detalle"`;
+                let onclickTarAttr = `onclick="abrirModalDetalle(this, '${keyTar}')" title="Clic para ver/editar detalle"`;
+                let onclickSdAttr = `onclick="abrirModalDetalle(this, '${keySabDom}')" title="Clic para ver/editar detalle"`;
 
                 if (ausObj) {
                     let textoAusencia = ausObj.tipoVisual || ausObj.tipo;
@@ -902,27 +897,27 @@ HTML
 
                     const filasPermanentes = ["alcaldia", "secplac", "seguridad1", "seguridad2", "riesgos"];
                     if (filasPermanentes.includes(f.tipoFila) && d < 5) {
-                        let infoInstitucional = renderizarCeldaManual(regMan.b1, regMan.b2, regMan.b3, regMan.disponible, regMan.archivo, 'manana', false, f.tipoFila, null);
+                        let infoInstitucional = renderizarCeldaManual(f.nombre, regMan.b1, regMan.b2, regMan.b3, regMan.disponible, regMan.archivo, 'manana', false, f.tipoFila, null);
                         let ppuHtmlInst = generarSelectPpuInteligente(f.nombre, f.tipoFila, f.esConductor, f.ppuDef, keyMan, keyTar, keySabDom, d);
                         
                         htmlBody += `
-                        <td colspan="2" class="${claseColorDia}"><div class="celda-clikeable ${infoInstitucional.claseCss}" ${onclickAttr}>${infoInstitucional.htmlRender}</div></td>
+                        <td colspan="2" class="${claseColorDia}"><div class="celda-clikeable ${infoInstitucional.claseCss}" ${onclickAttr}>${infoInstitucional.texto}</div></td>
                         <td class="col-ppu ${claseColorDia}">${ppuHtmlInst}</td>`;
                     } else if (d < 5) {
-                        let infoManana = renderizarCeldaManual(regMan.b1, regMan.b2, regMan.b3, regMan.disponible, regMan.archivo, 'manana', false, f.tipoFila, null);
-                        let infoTarde = renderizarCeldaManual(regTar.b1, regTar.b2, regTar.b3, regTar.disponible, regTar.archivo, 'tarde', false, f.tipoFila, regMan);
+                        let infoManana = renderizarCeldaManual(f.nombre, regMan.b1, regMan.b2, regMan.b3, regMan.disponible, regMan.archivo, 'manana', false, f.tipoFila, null);
+                        let infoTarde = renderizarCeldaManual(f.nombre, regTar.b1, regTar.b2, regTar.b3, regTar.disponible, regTar.archivo, 'tarde', false, f.tipoFila, regMan);
                         let ppuHtml = generarSelectPpuInteligente(f.nombre, f.tipoFila, f.esConductor, f.ppuDef, keyMan, keyTar, keySabDom, d);
                         
                         htmlBody += `
-                        <td class="${claseColorDia}"><div class="celda-clikeable ${infoManana.claseCss}" ${onclickAttr}>${infoManana.htmlRender}</div></td>
-                        <td class="${claseColorDia}"><div class="celda-clikeable ${infoTarde.claseCss}" ${onclickTarAttr}>${infoTarde.htmlRender}</div></td>
+                        <td class="${claseColorDia}"><div class="celda-clikeable ${infoManana.claseCss}" ${onclickAttr}>${infoManana.texto}</div></td>
+                        <td class="${claseColorDia}"><div class="celda-clikeable ${infoTarde.claseCss}" ${onclickTarAttr}>${infoTarde.texto}</div></td>
                         <td class="col-ppu ${claseColorDia}">${ppuHtml}</td>`;
                     } else {
-                        let infoSD = renderizarCeldaManual(regSD.b1, regSD.b2, regSD.b3, regSD.disponible, regSD.archivo, 'manana', true, f.tipoFila, null);
+                        let infoSD = renderizarCeldaManual(f.nombre, regSD.b1, regSD.b2, regSD.b3, regSD.disponible, regSD.archivo, 'manana', true, f.tipoFila, null);
                         let ppuHtmlSD = generarSelectPpuInteligente(f.nombre, f.tipoFila, f.esConductor, f.ppuDef, keyMan, keyTar, keySabDom, d);
                         
                         htmlBody += `
-                        <td class="${claseColorDia}"><div class="celda-clikeable ${infoSD.claseCss}" ${onclickSdAttr}>${infoSD.htmlRender}</div></td>
+                        <td class="${claseColorDia}"><div class="celda-clikeable ${infoSD.claseCss}" ${onclickSdAttr}>${infoSD.texto}</div></td>
                         <td class="col-ppu ${claseColorDia}">${ppuHtmlSD}</td>`;
                     }
                 }
@@ -932,13 +927,6 @@ HTML
         tbody.innerHTML = htmlBody;
         actualizarFechasSemanas();
         aplicarEstadoEmergenciaVisual();
-    }
-
-    function ampliarDiaMovil(dIndex) {
-        if (window.innerWidth <= 768 && window.innerWidth > window.innerHeight) {
-            diaAmpliadoMovilIndex = (diaAmpliadoMovilIndex === dIndex) ? null : dIndex;
-            construirTablaPrincipal();
-        }
     }
 
     function manejarSeleccionArchivoModal(inputEl) {
@@ -978,7 +966,7 @@ HTML
                     tieneActividad = true;
                 } else if (d < 5) {
                     let mStr = [regMan.b1, regMan.b2, regMan.b3].filter(Boolean).join(", ") || (regMan.disponible || "🟢 DISP.");
-                    let tStr = [regTar.b1, regTar.b2, regTar.b3].filter(Boolean).join(", ") || (regTar.disponible || "🟢 DISP.");
+                    let tStr = (f.nombre === "Alfonso Vera") ? "FUERA DE SERVICIO" : ([regTar.b1, regTar.b2, regTar.b3].filter(Boolean).join(", ") || (regTar.disponible || "🟢 DISP."));
                     subTexto += `  • ${fechas[d].nombreDia} ${fechas[d].textoCorto} [PPU: ${ppuAsignada}]:\n    - Mañ: ${mStr}\n    - Tard: ${tStr}\n`;
                     tieneActividad = true;
                 } else {
@@ -988,7 +976,7 @@ HTML
                 }
             });
 
-            if (tieneActividad) textoMinuta += `👤 *${f.nombre}*\n${subTexto}\n`;
+            if (tieneActividad) textoMinuta += `👤 *${f.corto}*\n${subTexto}\n`;
         });
 
         navigator.clipboard.writeText(textoMinuta).then(() => {
@@ -1265,7 +1253,6 @@ HTML
         return Math.ceil((fRt - hoy) / (1000 * 60 * 60 * 24));
     }
 
-    function llamar(num) { window.location.href = `tel:${num}`; }
     function copiarTablaNotepad() { alert("Planilla copiada para Excel."); }
     function enviarReporteEjecutivoWhatsApp() { alert("Reporte Ejecutivo generado."); }
 
